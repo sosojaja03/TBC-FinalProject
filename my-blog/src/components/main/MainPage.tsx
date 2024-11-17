@@ -87,7 +87,7 @@ export const MainPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Sidebar */}
+      {/* sidebar */}
       <div className="space-y-6">
         {/* Popular Tags */}
         <Card className="min-h-36 w-96 border-gray-800 bg-card p-4">
