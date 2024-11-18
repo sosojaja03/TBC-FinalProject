@@ -74,7 +74,7 @@ export const MainPage: React.FC = () => {
                 {post.tags.map((tag, i) => (
                   <span
                     key={i}
-                    className="rounded-full bg-gray-800 px-3 py-1 text-sm"
+                    className="rounded-full bg-gray-300 px-3 py-1 text-sm dark:bg-gray-800"
                   >
                     {t(`MainPage-Translation.tags.${tag}`, {
                       defaultValue: tag,
