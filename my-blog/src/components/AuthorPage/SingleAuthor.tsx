@@ -4,7 +4,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useTranslation } from "react-i18next";
 import { Badge } from "../ui/badge";
-import { Linkedin, Twitter } from "lucide-react";
 
 const featuredAuthors = [
   {
@@ -61,15 +60,6 @@ const posts = [
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae aut illum, quis dolorem explicabo dignissimos suscipit enim sit doloribus, cum porro, error quia odio. Quasi rerum a sint minima aliquam. in voluptate velit esse cillum dolore eu fugiat nulla pariatur...",
     tags: ["Blockchain", "Technology", "Future"],
   },
-];
-
-const popularTags = [
-  "Blockchain",
-  "Cryptocurrency",
-  "Technology",
-  "Programming",
-  "AI",
-  "Machine Learning",
 ];
 
 const AuthorPage = () => {

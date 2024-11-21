@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { Search } from "lucide-react";
 const SearchIcon: React.FC = () => {
-  const [isOpens, setIsOpen] = useState(false);
   return (
     <div>
       <Search />;
