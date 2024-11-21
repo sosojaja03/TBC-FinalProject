@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Card } from "../ui/card";
 import { Trans, useTranslation } from "react-i18next";
 const posts = [
@@ -40,9 +41,9 @@ const popularTags = [
 ];
 
 const featuredAuthors = [
-  { name: "Alice Johnson", role: "Blockchain Enthusiast" },
-  { name: "Bob Smith", role: "Crypto Analyst" },
-  { name: "Carol Williams", role: "Tech Journalist" },
+  { id: "1", name: "Alice Johnson", role: "Blockchain Enthusiast" },
+  { id: "2", name: "Bob Smith", role: "Crypto Analyst" },
+  { id: "3", name: "Carol Williams", role: "Tech Journalist" },
 ];
 
 export const MainPage: React.FC = () => {
@@ -107,21 +108,25 @@ export const MainPage: React.FC = () => {
             ))}
           </div>
         </Card>
-
         {/* Featured Authors */}
+
         <Card className="w-96 border-gray-800 bg-card p-4">
           <h3 className="mb-4 font-semibold">
             <Trans>MainPage-Translation.Featured Authors</Trans>
           </h3>
           <div className="space-y-4">
-            {featuredAuthors.map((author, index) => (
-              <div key={index} className="flex items-center space-x-3">
+            {featuredAuthors.map((author) => (
+              <Link
+                key={author.id}
+                to={`/author/${author.id}`} // Updated route
+                className="flex items-center space-x-3 rounded-md p-2 transition hover:bg-gray-700"
+              >
                 <div className="h-10 w-10 rounded-full bg-gray-800" />
                 <div>
                   <div className="font-medium">{author.name}</div>
                   <div className="text-sm text-gray-400">{author.role}</div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </Card>
