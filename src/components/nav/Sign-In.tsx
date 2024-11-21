@@ -13,7 +13,7 @@ const SignIn: React.FC = () => {
 
   return (
     <div>
-      <Button className="bg-blue-600" onClick={handleSignIn}>
+      <Button className="bg-blue-500" onClick={handleSignIn}>
         Sign In
       </Button>
     </div>
