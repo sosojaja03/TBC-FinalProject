@@ -7,10 +7,31 @@ import RegistrationForm from "./components/Registration/Registration";
 import AboutPage from "./components/About/About";
 import AuthorPage from "./components/AuthorPage/SingleAuthor";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useEffect } from "react";
+import { supabase } from "./supabase";
+import { UseAuthContext } from "./components/context/hooks/AuthContextHook";
+import { AuthGuard } from "./components/route-guards/AuthGuard";
+// import ProfilePage from "./components/Profile/ProfilePage";
 
 const queryClient = new QueryClient();
 
 function App() {
+  const { handleSetUser } = UseAuthContext();
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      handleSetUser(session);
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      handleSetUser(session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, [handleSetUser]);
+
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
@@ -18,10 +39,33 @@ function App() {
           <Routes>
             <Route path="/" element={<Layout />}>
               <Route index element={<MainPage />} />
-              <Route path="sign-in" element={<SignInPage />}></Route>
-              <Route path="about" element={<AboutPage />}></Route>
-              <Route path="registration" element={<RegistrationForm />} />
+              <Route
+                path="sign-in"
+                element={
+                  <AuthGuard>
+                    <SignInPage />
+                  </AuthGuard>
+                }
+              ></Route>
+              <Route
+                path="about"
+                element={
+                  // <AuthGuard>
+                  // </AuthGuard>
+                  <AboutPage />
+                }
+              ></Route>
+              <Route
+                path="registration"
+                element={
+                  <AuthGuard>
+                    <RegistrationForm />
+                  </AuthGuard>
+                }
+              />
               <Route path="MainPage" element={<MainPage />}></Route>
+              {/* <Route path="profile" element={<ProfilePage />} /> */}
+
               <Route path="author/:authorId" element={<AuthorPage />}></Route>
             </Route>
           </Routes>

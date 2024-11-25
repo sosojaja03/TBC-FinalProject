@@ -12,6 +12,7 @@ const SignInPage: React.FC = () => {
   //     i18next.changeLanguage(lang); // Change the language in i18next
   //   }
   // }, [lang]);
+
   return (
     <div className="container mx-auto p-8">
       <h1 className="mb-4 text-2xl font-bold">Sign In</h1>

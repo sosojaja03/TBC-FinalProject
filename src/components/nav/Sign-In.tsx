@@ -9,6 +9,7 @@ const SignIn: React.FC = () => {
 
   const handleSignIn = () => {
     navigate("/sign-in"); // Navigate to the Sign In page
+    console.log("SignIn");
   };
 
   return (

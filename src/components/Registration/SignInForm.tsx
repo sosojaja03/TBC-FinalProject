@@ -42,6 +42,16 @@ const login = async ({
   return data;
 };
 
+export const logout = async () => {
+  try {
+    const { error } = await supabase.auth.signOut();
+    if (error) throw error;
+    // Handle successful logout (e.g., redirect to login page)
+  } catch (error) {
+    console.error("Error logging out:", error);
+  }
+};
+
 export const SignInForm = () => {
   const navigate = useNavigate(); // Initialize the navigate function
 
@@ -70,7 +80,8 @@ export const SignInForm = () => {
     mutationFn: login,
     onSuccess: (data) => {
       console.log("User logged in:", data);
-      navigate("/dashboard"); // Redirect after successful login
+      // navigate("/dashboard"); // Redirect after successful login
+      navigate("/MainPage");
     },
     onError: (error: any) => {
       console.error("Login failed:", error.message);
@@ -81,6 +92,8 @@ export const SignInForm = () => {
     const { email, password } = values;
     handleLogin({ email, password });
   };
+
+  console.log("SignInForm rendered");
 
   return (
     <Form {...form}>
