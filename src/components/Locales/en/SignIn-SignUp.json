@@ -1,0 +1,26 @@
+{
+  "Email": "Email",
+  "email": {
+    "required": "Email is required",
+    "invalid": "Please enter a valid email address",
+    "maxLength": "Email cannot be longer than 100 characters"
+  },
+  "password": {
+    "required": "Password is required",
+    "minLength": "Password must be at least 6 characters long",
+    "maxLength": "Password cannot be longer than 50 characters",
+    "pattern": "Password must contain at least one uppercase letter, one lowercase letter, and one number"
+  },
+  "username": {
+    "required": "Username is required",
+    "minLength": "Username must be at least 3 characters long",
+    "maxLength": "Username cannot be longer than 50 characters",
+    "pattern": "Username can only contain letters, numbers, underscores, and hyphens"
+  },
+  "login": {
+    "error": "Invalid login credentials"
+  },
+  "bio": {
+    "maxLength": "Bio cannot be longer than 500 characters"
+  }
+}

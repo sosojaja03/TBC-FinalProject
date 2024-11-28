@@ -111,12 +111,13 @@ import { Search } from "lucide-react";
 import Language from "./Language";
 import { ModeToggle } from "./mode-toggle";
 import { Trans, useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { UseAuthContext } from "../context/hooks/AuthContextHook";
 import { Button } from "../ui/button";
 import { useMutation } from "@tanstack/react-query";
 import { logout } from "../Registration/SignInForm";
 import SignIn from "./Sign-In";
+import { Avatar, AvatarImage } from "../ui/avatar";
 
 export const NavBar: React.FC = () => {
   useTranslation();
@@ -138,33 +139,40 @@ export const NavBar: React.FC = () => {
           <div className="flex items-center space-x-4">
             <ul className="flex gap-3">
               <li>
-                <Link to="/">
+                <NavLink to="/">
                   <Trans>nav-Translation.Home</Trans>
-                </Link>
+                </NavLink>
               </li>
               <li>
-                <Link to="/write">
+                <NavLink to="/write">
                   <Trans>nav-Translation.Write</Trans>
-                </Link>
+                </NavLink>
               </li>
               <li>
-                <Link to="/about">
+                <NavLink to="/about">
                   <Trans>nav-Translation.About</Trans>
-                </Link>
+                </NavLink>
               </li>
             </ul>
           </div>
           <div className="flex items-center gap-2">
             <Search className="h-[26px] w-[26px] text-gray-400" />
+            <Language />
+            <ModeToggle />
             {user ? (
-              <Button className="bg-blue-500" onClick={() => handleLogOut()}>
-                LogOut
-              </Button>
+              <>
+                <Button className="bg-blue-500" onClick={() => handleLogOut()}>
+                  LogOut
+                </Button>
+                <NavLink to="AvatarView">
+                  <Avatar className="bg-red-600">
+                    <AvatarImage src={user.avatarUrl} alt="Profile" />
+                  </Avatar>
+                </NavLink>
+              </>
             ) : (
               <SignIn />
             )}
-            <Language />
-            <ModeToggle />
           </div>
         </div>
       </nav>

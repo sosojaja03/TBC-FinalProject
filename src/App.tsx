@@ -7,20 +7,23 @@ import RegistrationForm from "./components/Registration/Registration";
 import AboutPage from "./components/About/About";
 import AuthorPage from "./components/AuthorPage/SingleAuthor";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "./supabase";
 import { UseAuthContext } from "./components/context/hooks/AuthContextHook";
 import { AuthGuard } from "./components/route-guards/AuthGuard";
+import Homeview from "./components/Profile/AvatarView";
 // import ProfilePage from "./components/Profile/ProfilePage";
 
 const queryClient = new QueryClient();
 
 function App() {
   const { handleSetUser } = UseAuthContext();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       handleSetUser(session);
+      setLoading(false);
     });
 
     const {
@@ -31,6 +34,10 @@ function App() {
 
     return () => subscription.unsubscribe();
   }, [handleSetUser]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -64,6 +71,7 @@ function App() {
                 }
               />
               <Route path="MainPage" element={<MainPage />}></Route>
+              <Route path="AvatarView" element={<Homeview />}></Route>
               {/* <Route path="profile" element={<ProfilePage />} /> */}
 
               <Route path="author/:authorId" element={<AuthorPage />}></Route>

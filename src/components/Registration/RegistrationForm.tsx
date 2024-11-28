@@ -16,14 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useMutation } from "@tanstack/react-query";
 import { supabase } from "@/supabase";
-
-// Validation schema
-const formSchema = z.object({
-  email: z.string().email({ message: "Invalid email address." }),
-  password: z
-    .string()
-    .min(6, { message: "Password must be at least 6 characters." }),
-});
+import { Trans, useTranslation } from "react-i18next";
 
 // Supabase registration function
 const register = async ({
@@ -43,7 +36,19 @@ const register = async ({
 
 export const ProfileForm = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
+  // Validation schema
+  const formSchema = z.object({
+    email: z
+      .string()
+      .min(1, { message: t("SignIn-SignUp-Translation.email.required") }) // Use . instead of :
+      .email({ message: t("SignIn-SignUp-Translation.email.invalid") }),
+    password: z
+      .string()
+      .min(1, { message: t("SignIn-SignUp-Translation.password.required") }) // Add required validation
+      .min(6, { message: t("SignIn-SignUp-Translation.password.minLength") }),
+  });
   const {
     mutate: handleRegister,
     isPending,
@@ -64,6 +69,7 @@ export const ProfileForm = () => {
       email: "",
       password: "",
     },
+    mode: "onTouched", // This will validate on blur
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
@@ -83,7 +89,11 @@ export const ProfileForm = () => {
               <FormControl>
                 <Input placeholder="Enter your email" {...field} />
               </FormControl>
-              <FormMessage />
+              {form.formState.errors.email && (
+                <FormMessage>
+                  {t(form.formState.errors.email.message || "")}
+                </FormMessage>
+              )}
             </FormItem>
           )}
         />
@@ -100,14 +110,24 @@ export const ProfileForm = () => {
                   {...field}
                 />
               </FormControl>
-              <FormMessage />
+              {form.formState.errors.password && (
+                <FormMessage>
+                  {t(form.formState.errors.password.message || "")}
+                </FormMessage>
+              )}
             </FormItem>
           )}
         />
         <Button type="submit" disabled={isPending}>
           {isPending ? "Registering..." : "Submit"}
         </Button>
-        {isError && <p className="text-red-500">{(error as Error).message}</p>}
+        {isError && (
+          <p className="text-red-500">
+            {t("SignIn-SignUp-Translation.login.error", {
+              defaultValue: (error as Error).message,
+            })}
+          </p>
+        )}{" "}
       </form>
       <Button className="mt-5 w-80" onClick={() => navigate("/sign-in")}>
         Sign In
