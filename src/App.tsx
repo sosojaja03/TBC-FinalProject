@@ -12,6 +12,9 @@ import { supabase } from "./supabase";
 import { UseAuthContext } from "./components/context/hooks/AuthContextHook";
 import { AuthGuard } from "./components/route-guards/AuthGuard";
 import Homeview from "./components/Profile/AvatarView";
+import CreateBlogForm from "./components/CreateBlog/CreateBlog";
+import TestView from "./components/Blogs/Blog";
+import BlogView from "./components/Blogs/Blog";
 // import ProfilePage from "./components/Profile/ProfilePage";
 
 const queryClient = new QueryClient();
@@ -29,6 +32,12 @@ function App() {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!session) {
+        supabase.auth.signInWithPassword({
+          email: "sosojajanidze486@gmail.com",
+          password: "masterchef2003",
+        });
+      }
       handleSetUser(session);
     });
 
@@ -71,6 +80,8 @@ function App() {
                 }
               />
               <Route path="MainPage" element={<MainPage />}></Route>
+              <Route path="BlogList" element={<BlogView />}></Route>
+              {/* <Route path="CreateBlog" element={<CreateBlogForm />}></Route> */}
               <Route path="AvatarView" element={<Homeview />}></Route>
               {/* <Route path="profile" element={<ProfilePage />} /> */}
 

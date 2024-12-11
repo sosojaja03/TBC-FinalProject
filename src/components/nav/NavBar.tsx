@@ -144,7 +144,7 @@ export const NavBar: React.FC = () => {
                 </NavLink>
               </li>
               <li>
-                <NavLink to="/write">
+                <NavLink to="/BlogList">
                   <Trans>nav-Translation.Write</Trans>
                 </NavLink>
               </li>

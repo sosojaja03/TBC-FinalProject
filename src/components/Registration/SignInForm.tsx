@@ -17,7 +17,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useMutation } from "@tanstack/react-query";
 import { supabase } from "@/supabase"; // Make sure to import the supabase client
-import { Trans, useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
 
 // Validation schema
 
@@ -41,6 +41,7 @@ export const logout = async () => {
   try {
     const { error } = await supabase.auth.signOut();
     if (error) throw error;
+    console.log("successfully logged out");
     // Handle successful logout (e.g., redirect to login page)
   } catch (error) {
     console.error("Error logging out:", error);
