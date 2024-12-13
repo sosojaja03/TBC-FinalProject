@@ -5,7 +5,6 @@ import { supabase } from "@/supabase";
 // import { useAtom } from "jotai";
 import { Controller, useForm } from "react-hook-form";
 import { UseAuthContext } from "../context/hooks/AuthContextHook";
-import TestView from "../Blogs/Blog";
 
 type BlogsListCreateValues = {
   title_ka: string;
@@ -31,28 +30,70 @@ const CreateBlogForm = () => {
     defaultValues: BlogsListFilterFormDefaultValues,
   });
 
-  const onSubmit = (formValues: BlogsListCreateValues) => {
+  // const onSubmit = (formValues: BlogsListCreateValues) => {
+  //   console.log(formValues);
+  //   if (formValues?.image_file) {
+  //     supabase.storage
+  //       .from("blog_images")
+  //       .upload(formValues?.image_file?.name, formValues?.image_file)
+  //       .then((res) => {
+  //         if (res.error) {
+  //           console.error("Upload error:", res.error);
+  //         } else {
+  //           console.log("Upload successful:", res.data);
+  //         }
+  //         return supabase.from("blogs").insert({
+  //           title_en: formValues.title_en,
+  //           description_en: formValues.description_en,
+  //           image_url: res.data?.fullPath,
+  //           user_id: handleSetUser?.user?.id,
+  //         });
+  //       })
+  //       .then((res) => {
+  //         console.log("Successfully Created Blog: ", res);
+  //       });
+  //   }
+  // };
+  const onSubmit = async (formValues: BlogsListCreateValues) => {
     console.log(formValues);
+
     if (formValues?.image_file) {
-      supabase.storage
-        .from("blog_images")
-        .upload(formValues?.image_file?.name, formValues?.image_file)
-        .then((res) => {
-          if (res.error) {
-            console.error("Upload error:", res.error);
-          } else {
-            console.log("Upload successful:", res.data);
-          }
-          return supabase.from("blogs").insert({
+      try {
+        const { error, data } = await supabase.storage
+          .from("blog_images")
+          .upload(formValues?.image_file?.name, formValues?.image_file);
+
+        if (error) {
+          console.error("Upload error:", error);
+          // Display an error message to the user
+          alert("Error uploading image. Please try again.");
+          return;
+        }
+
+        console.log("Upload successful:", data);
+
+        const { error: insertError, data: insertData } = await supabase
+          .from("blogs")
+          .insert({
             title_en: formValues.title_en,
             description_en: formValues.description_en,
-            image_url: res.data?.fullPath,
+            image_url: data?.fullPath,
             user_id: handleSetUser?.user?.id,
           });
-        })
-        .then((res) => {
-          console.log("Successfully Created Blog: ", res);
-        });
+
+        if (insertError) {
+          console.error("Insert error:", insertError);
+          // Display an error message to the user
+          alert("Error creating the blog post. Please try again.");
+          return;
+        }
+
+        console.log("Successfully Created Blog: ", insertData);
+      } catch (error) {
+        console.error("An unexpected error occurred:", error);
+        // Display a generic error message to the user
+        alert("An unexpected error occurred. Please try again later.");
+      }
     }
   };
 
@@ -99,7 +140,6 @@ const CreateBlogForm = () => {
         />
         <Button onClick={handleSubmit(onSubmit)}>Create Blog</Button>
       </div>
-      <div> {/* <TestView />{" "} */}</div>
     </div>
   );
 };

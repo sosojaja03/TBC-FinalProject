@@ -122,7 +122,7 @@ import { Avatar, AvatarImage } from "../ui/avatar";
 export const NavBar: React.FC = () => {
   useTranslation();
   const { user } = UseAuthContext();
-  console.log(user);
+  // console.log(user);
 
   const { mutate: handleLogOut } = useMutation({
     mutationKey: ["logout"],
