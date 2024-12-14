@@ -1,11 +1,15 @@
 import { Input } from "@/components/ui/input";
 import CreateBlogForm from "../CreateBlog/CreateBlog";
 import { supabase } from "@/supabase";
-import qs from "qs";
-import { useCallback, useEffect, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useForm, Controller } from "react-hook-form";
+import { useState, useEffect, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
-import underscore from "underscore";
+import qs from "qs";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+
+dayjs.extend(relativeTime);
 
 type SingleBlog = {
   created_at: string;
@@ -22,54 +26,104 @@ type BlogsFilterFormValues = {
   searchText: string;
 };
 
-const BlogView = () => {
-  const [blogs, setBlogs] = useState<SingleBlog[]>([]);
-
-  const [searchParams] = useSearchParams();
-  const parsedQueryParams = qs.parse(searchParams.toString());
-
-  const { control, watch } = useForm<BlogsFilterFormValues>({
-    defaultValues: parsedQueryParams,
-  });
+// Custom hook for debouncing
+const useDebounce = (value: string, delay: number) => {
+  const [debouncedValue, setDebouncedValue] = useState(value);
 
   useEffect(() => {
-    const parsedSearchParams = qs.parse(searchParams.toString());
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
 
-    const searchText = parsedSearchParams?.searchText;
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [value, delay]);
 
-    supabase
+  return debouncedValue;
+};
+
+const formatBlogDate = (dateString: string) => {
+  const blogDate = dayjs(dateString);
+  const now = dayjs();
+
+  if (now.diff(blogDate, "day") < 1) {
+    return blogDate.fromNow();
+  }
+
+  return blogDate.format("HH:mm - DD/MM/YYYY");
+};
+
+const fetchBlogs = async (searchText?: string): Promise<SingleBlog[]> => {
+  // If no search text, fetch all blogs
+  if (!searchText || searchText.trim() === "") {
+    const { data, error } = await supabase
       .from("blogs")
       .select("*")
-      .ilike("title_en", `%${searchText ?? ""}%`)
-      .throwOnError()
-      .then((res) => {
-        const blogsList = res.data as unknown as SingleBlog[];
-        setBlogs(blogsList);
-      });
-  }, []);
+      .order("created_at", { ascending: false });
 
-  const watchedSearchText = watch("searchText");
+    if (error) throw error;
+    return data as SingleBlog[];
+  }
 
-  const fetchBlogs = useCallback(
-    underscore.debounce((watchedSearchText: string) => {
-      supabase
-        .from("blogs")
-        .select("*")
-        .ilike("title_en", `${watchedSearchText}%`)
-        .throwOnError()
-        .then((res) => {
-          const blogsList = res.data as unknown as SingleBlog[];
-          setBlogs(blogsList);
-        });
-    }, 500),
-    [],
+  // If search text is provided, filter blogs
+  const { data, error } = await supabase
+    .from("blogs")
+    .select("*")
+    .or(`title_en.ilike.%${searchText}%, description_en.ilike.%${searchText}%`)
+    .order("created_at", { ascending: false });
+
+  if (error) throw error;
+  return data as SingleBlog[];
+};
+
+const BlogView = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const queryClient = useQueryClient();
+
+  const initialParams = useMemo(
+    () => qs.parse(searchParams.toString()) as { searchText?: string },
+    [searchParams],
   );
 
+  const { control, watch, setValue } = useForm<BlogsFilterFormValues>({
+    defaultValues: {
+      searchText: initialParams.searchText || "",
+    },
+  });
+
+  const watchedSearchText = watch("searchText");
+  const debouncedSearchText = useDebounce(watchedSearchText, 500);
+
+  // Use React Query to manage blog fetching
+  const {
+    data: blogs = [],
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["blogs", { debouncedSearchText }],
+    queryFn: () => fetchBlogs(debouncedSearchText),
+    staleTime: Infinity,
+    // enabled: true,
+  });
+
+  // Update URL search params when debounced search text changes
   useEffect(() => {
-    if (watchedSearchText?.length > 2) {
-      fetchBlogs(watchedSearchText);
+    if (debouncedSearchText && debouncedSearchText.length > 0) {
+      const queryString = qs.stringify(
+        {
+          searchText: debouncedSearchText,
+        },
+        {
+          addQueryPrefix: true,
+        },
+      );
+
+      window.history.replaceState(null, "", queryString);
+    } else {
+      window.history.replaceState(null, "", window.location.pathname);
     }
-  }, [watchedSearchText, fetchBlogs]);
+  }, [debouncedSearchText]);
 
   return (
     <div className="flex flex-col gap-y-10">
@@ -78,19 +132,22 @@ const BlogView = () => {
         <Controller
           control={control}
           name="searchText"
-          render={({ field: { onChange, value } }) => {
-            return (
-              <Input
-                onChange={onChange}
-                value={value}
-                placeholder="Enter Search Text..."
-              />
-            );
-          }}
+          render={({ field: { onChange, value } }) => (
+            <Input
+              onChange={onChange}
+              value={value}
+              placeholder="Enter Search Text..."
+            />
+          )}
         />
-        {/* <Button onClick={handleSubmit(onSubmit)}>Search</Button> */}
       </div>
       <div className="flex flex-col gap-y-10 px-32">
+        {isLoading && <p className="text-center">Loading blogs...</p>}
+        {error && (
+          <p className="text-center text-red-500">
+            Error loading blogs: {error.message}
+          </p>
+        )}
         {blogs.map((blog) => {
           const blogImageUrl = blog?.image_url
             ? `${import.meta.env.VITE_SUPABASE_BLOG_IMAGES_STORAGE_URL}/${blog?.image_url}`
@@ -101,14 +158,26 @@ const BlogView = () => {
               key={blog.id}
               className="flex flex-col gap-y-4 border border-gray-400 p-6"
             >
-              <div>
-                <img className="border border-black" src={blogImageUrl} />
+              {blogImageUrl && (
+                <div>
+                  <img
+                    className="max-h-96 w-full border border-black object-cover"
+                    src={blogImageUrl}
+                    alt={blog?.title_en || "Blog image"}
+                  />
+                </div>
+              )}
+              <div className="text-xl font-bold">{blog?.title_en}</div>
+              <div className="text-gray-700">{blog?.description_en}</div>
+              <div className="text-sm text-gray-500">
+                {formatBlogDate(blog.created_at)}
               </div>
-              <div>{blog?.title_en}</div>
-              <div>{blog?.description_en}</div>
             </div>
           );
         })}
+        {blogs.length === 0 && !isLoading && (
+          <p className="text-center text-gray-500">No blogs found</p>
+        )}
       </div>
     </div>
   );
