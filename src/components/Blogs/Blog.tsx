@@ -79,14 +79,13 @@ const fetchBlogs = async (searchText?: string): Promise<SingleBlog[]> => {
 
 const BlogView = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const queryClient = useQueryClient();
 
   const initialParams = useMemo(
     () => qs.parse(searchParams.toString()) as { searchText?: string },
     [searchParams],
   );
 
-  const { control, watch, setValue } = useForm<BlogsFilterFormValues>({
+  const { control, watch } = useForm<BlogsFilterFormValues>({
     defaultValues: {
       searchText: initialParams.searchText || "",
     },
@@ -111,19 +110,17 @@ const BlogView = () => {
   useEffect(() => {
     if (debouncedSearchText && debouncedSearchText.length > 0) {
       const queryString = qs.stringify(
-        {
-          searchText: debouncedSearchText,
-        },
-        {
-          addQueryPrefix: true,
-        },
+        { searchText: debouncedSearchText },
+        { addQueryPrefix: true },
       );
 
-      window.history.replaceState(null, "", queryString);
+      setSearchParams(queryString); // Update the URL using useSearchParams
+      // window.history.replaceState(null, "", queryString);
     } else {
-      window.history.replaceState(null, "", window.location.pathname);
+      setSearchParams({}); // Clear the search params
+      // window.history.replaceState(null, "", window.location.pathname);
     }
-  }, [debouncedSearchText]);
+  }, [debouncedSearchText, setSearchParams]);
 
   return (
     <div className="flex flex-col gap-y-10">
