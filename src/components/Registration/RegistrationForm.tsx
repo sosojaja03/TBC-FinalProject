@@ -16,7 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useMutation } from "@tanstack/react-query";
 import { supabase } from "@/supabase";
-import { Trans, useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
 
 // Supabase registration function
 const register = async ({

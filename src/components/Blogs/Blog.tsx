@@ -1,7 +1,7 @@
 import { Input } from "@/components/ui/input";
 import CreateBlogForm from "../CreateBlog/CreateBlog";
 import { supabase } from "@/supabase";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useForm, Controller } from "react-hook-form";
 import { useState, useEffect, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";

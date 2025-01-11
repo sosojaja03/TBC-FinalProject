@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   Card,
   CardHeader,
@@ -14,28 +14,28 @@ import { UseAuthContext } from "../context/hooks/AuthContextHook";
 import { ProfilePayload } from "./ProfileTypes";
 import { useMutation } from "@tanstack/react-query";
 import { fillProfileInfo, getProfileInfo } from ".";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+// import { zodResolver } from "@hookform/resolvers/zod";
+// import { useForm } from "react-hook-form";
+// import { z } from "zod";
 
-const profileFormSchema = z.object({
-  username: z.string().min(1, { message: "Username is required" }),
-  email: z
-    .string()
-    .min(1, { message: "Email is required" })
-    .email({ message: "Invalid email format" }),
-  full_name_en: z
-    .string()
-    .min(1, { message: "Full Name (English) is required" }),
-  full_name_ka: z
-    .string()
-    .min(1, { message: "Full Name (Georgian) is required" }),
-  phone: z
-    .string()
-    .min(1, { message: "Phone number is required" })
-    .regex(/^\+?\d{10,15}$/, { message: "Phone number is invalid" }), // Adjust phone regex as needed
-  avatar_url: z.string().url({ message: "Invalid URL" }),
-});
+// const profileFormSchema = z.object({
+//   username: z.string().min(1, { message: "Username is required" }),
+//   email: z
+//     .string()
+//     .min(1, { message: "Email is required" })
+//     .email({ message: "Invalid email format" }),
+//   full_name_en: z
+//     .string()
+//     .min(1, { message: "Full Name (English) is required" }),
+//   full_name_ka: z
+//     .string()
+//     .min(1, { message: "Full Name (Georgian) is required" }),
+//   phone: z
+//     .string()
+//     .min(1, { message: "Phone number is required" })
+//     .regex(/^\+?\d{10,15}$/, { message: "Phone number is invalid" }), // Adjust phone regex as needed
+//   avatar_url: z.string().url({ message: "Invalid URL" }),
+// });
 
 const ProfileForm = () => {
   const { user } = UseAuthContext();
@@ -82,9 +82,9 @@ const ProfileForm = () => {
 
   const [isEditing, setIsEditing] = useState(false);
   const [showAvatarPicker, setShowAvatarPicker] = useState(false);
-  const [selectedAvatarSvg, setSelectedAvatarSvg] = useState("");
+  const [, setSelectedAvatarSvg] = useState("");
 
-  const handleAvatarSelect = (avatarSvg) => {
+  const handleAvatarSelect = (avatarSvg: string) => {
     setSelectedAvatarSvg(avatarSvg);
     setFormData((prev) => ({
       ...prev,
@@ -93,7 +93,7 @@ const ProfileForm = () => {
     setShowAvatarPicker(false);
   };
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
@@ -102,11 +102,11 @@ const ProfileForm = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Updated data:", formData);
-    setIsEditing(false);
-  };
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   console.log("Updated data:", formData);
+  //   setIsEditing(false);
+  // };
 
   return (
     <Card className="mx-auto w-full max-w-md">

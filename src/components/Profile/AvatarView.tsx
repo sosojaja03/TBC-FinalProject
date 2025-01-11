@@ -1,10 +1,10 @@
 // import { MainPage } from "../main/MainPage";
-import AvatarComp from "./Avatar";
+// import AvatarComp from "./Avatar";
 import ProfileForm from "./EditForm";
 
-const handleAvatarSelect = (avatarSvg: string) => {
-  console.log("Selected Avatar:", avatarSvg);
-};
+// const handleAvatarSelect = (avatarSvg: string) => {
+//   console.log("Selected Avatar:", avatarSvg);
+// };
 
 const Homeview = () => {
   return (
