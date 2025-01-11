@@ -1,18 +1,19 @@
 {
   "routes": [
     {
-      "src": "/public/(.*)",
-      "dest": "/public/$1"
-    },
-    {
       "src": "/(.*)",
       "dest": "/index.html"
-    },
+    }
+  ],
+  "headers": [
     {
-      "src": "/(.*)",
-      "headers": {
-        "Cache-Control": "no-store"
-      }
+      "source": "/(.*).js",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/javascript"
+        }
+      ]
     }
   ]
 }
