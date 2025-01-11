@@ -30,12 +30,6 @@ function App() {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (!session) {
-        supabase.auth.signInWithPassword({
-          email: "sosojajanidze486@gmail.com",
-          password: "masterchef2003",
-        });
-      }
       handleSetUser(session);
     });
 
