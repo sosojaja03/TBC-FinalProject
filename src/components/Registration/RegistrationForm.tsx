@@ -60,6 +60,7 @@ export const ProfileForm = () => {
     onSuccess: (data) => {
       console.log("User created:", data);
       // navigate("/welcome"); // Redirect after successful registration
+      navigate("/sign-in");
     },
   });
 
