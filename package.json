@@ -10,6 +10,7 @@
     "preview": "vite preview",
     "generate-types": "supabase gen types typescript --project-id gtpsceyovcrmuxrrqiga --schema public > src/supabase.types.ts"
   },
+  "homepage": ".",
   "dependencies": {
     "@dicebear/collection": "^9.2.2",
     "@dicebear/core": "^9.2.2",
