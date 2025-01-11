@@ -50,9 +50,9 @@ function App() {
               <Route
                 path="sign-in"
                 element={
-                  <SignInPage />
-                  // <AuthGuard>
-                  // </AuthGuard>
+                  <AuthGuard>
+                    <SignInPage />
+                  </AuthGuard>
                 }
               ></Route>
               <Route
