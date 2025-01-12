@@ -91,9 +91,6 @@ export const SignInForm = () => {
       // navigate("/dashboard"); // Redirect after successful login
       navigate("/MainPage");
     },
-    onError: (error: any) => {
-      console.error("Login failed:", error.message);
-    },
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {

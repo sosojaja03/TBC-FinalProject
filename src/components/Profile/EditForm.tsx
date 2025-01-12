@@ -51,7 +51,7 @@ const ProfileForm = () => {
 
   useEffect(() => {
     if (user) {
-      getProfileInfo(user?.user?.id).then((res) => console.log(res));
+      getProfileInfo(user?.id).then((res) => console.log(res));
     }
   }, [user]);
 
@@ -61,7 +61,7 @@ const ProfileForm = () => {
     onError: (error) => {
       console.error("Profile update failed", error);
     },
-    onSuccess: (data: any) => {
+    onSuccess: (data: ProfilePayload[]) => {
       console.log("Profile updated successfully", data);
       setIsEditing(false);
 
@@ -71,7 +71,7 @@ const ProfileForm = () => {
 
   const handleSubmite = () => {
     if (user) {
-      handleProfileChange({ ...formData, id: user?.user?.id });
+      handleProfileChange({ ...formData, id: user?.id });
     } else {
       console.error("User is not authenticated");
     }

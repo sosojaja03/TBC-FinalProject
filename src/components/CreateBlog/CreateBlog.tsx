@@ -24,7 +24,7 @@ const BlogsListFilterFormDefaultValues = {
 };
 
 const CreateBlogForm = () => {
-  const { handleSetUser } = UseAuthContext();
+  const { user } = UseAuthContext();
   const queryClient = useQueryClient();
 
   const { control, handleSubmit } = useForm<BlogsListCreateValues>({
@@ -56,7 +56,7 @@ const CreateBlogForm = () => {
               title_en: formValues.title_en,
               description_en: formValues.description_en,
               image_url: data?.fullPath,
-              user_id: handleSetUser?.user?.id,
+              user_id: user?.id,
             });
 
           if (insertError) {
