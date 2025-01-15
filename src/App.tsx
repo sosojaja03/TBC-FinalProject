@@ -11,8 +11,9 @@ import { useEffect, useState } from "react";
 import { supabase } from "./supabase";
 import { UseAuthContext } from "./components/context/hooks/AuthContextHook";
 import { AuthGuard } from "./components/route-guards/AuthGuard";
-import Homeview from "./components/Profile/AvatarView";
+// import Homeview from "./components/Profile/AvatarView";
 import BlogView from "./components/Blogs/Blog";
+import { ProfileView } from "./components/Profile/view/profile";
 // import ProfilePage from "./components/Profile/ProfilePage";
 
 const queryClient = new QueryClient();
@@ -74,8 +75,8 @@ function App() {
               <Route path="MainPage" element={<MainPage />}></Route>
               <Route path="BlogList" element={<BlogView />}></Route>
               {/* <Route path="CreateBlog" element={<CreateBlogForm />}></Route> */}
-              <Route path="AvatarView" element={<Homeview />}></Route>
-              {/* <Route path="profile" element={<ProfilePage />} /> */}
+              {/* <Route path="AvatarView" element={<Homeview />}></Route> */}
+              <Route path="ProfileView" element={<ProfileView />} />
 
               <Route path="author/:authorId" element={<AuthorPage />}></Route>
             </Route>

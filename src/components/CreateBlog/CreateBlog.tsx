@@ -7,19 +7,19 @@ import { Controller, useForm } from "react-hook-form";
 import { UseAuthContext } from "../context/hooks/AuthContextHook";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-type BlogsListCreateValues = {
+type BooksListCreateValues = {
   title_ka: string;
-  title_en: string;
+  title: string;
   description_ka: string;
-  description_en: string;
+  description: string;
   image_file: null | File;
 };
 
-const BlogsListFilterFormDefaultValues = {
+const BooksListFilterFormDefaultValues = {
   title_ka: "",
   description_ka: "",
-  title_en: "",
-  description_en: "",
+  title: "",
+  description: "",
   image_file: null,
 };
 
@@ -27,18 +27,18 @@ const CreateBlogForm = () => {
   const { user } = UseAuthContext();
   const queryClient = useQueryClient();
 
-  const { control, handleSubmit } = useForm<BlogsListCreateValues>({
-    defaultValues: BlogsListFilterFormDefaultValues,
+  const { control, handleSubmit } = useForm<BooksListCreateValues>({
+    defaultValues: BooksListFilterFormDefaultValues,
   });
 
   const { mutate: addBlog } = useMutation({
-    mutationFn: async (formValues: BlogsListCreateValues) => {
+    mutationFn: async (formValues: BooksListCreateValues) => {
       console.log(formValues);
 
       if (formValues?.image_file) {
         try {
           const { error, data } = await supabase.storage
-            .from("blog_images")
+            .from("books_images")
             .upload(formValues?.image_file?.name, formValues?.image_file);
 
           if (error) {
@@ -51,10 +51,10 @@ const CreateBlogForm = () => {
           console.log("Upload successful:", data);
 
           const { error: insertError, data: insertData } = await supabase
-            .from("blogs")
+            .from("Books")
             .insert({
-              title_en: formValues.title_en,
-              description_en: formValues.description_en,
+              title: formValues.title,
+              description: formValues.description,
               image_url: data?.fullPath,
               user_id: user?.id,
             });
@@ -76,11 +76,11 @@ const CreateBlogForm = () => {
     },
     onSuccess: () => {
       console.log("Blog created successfully");
-      queryClient.invalidateQueries({ queryKey: ["blogs"] });
+      queryClient.invalidateQueries({ queryKey: ["Books"] });
     },
   });
 
-  const onSubmit = (data: BlogsListCreateValues) => {
+  const onSubmit = (data: BooksListCreateValues) => {
     addBlog(data);
   };
 
@@ -134,7 +134,7 @@ const CreateBlogForm = () => {
       <div className="flex w-96 flex-col items-center justify-center gap-y-4">
         <Controller
           control={control}
-          name="title_en"
+          name="title"
           rules={{ required: "Title is required" }} // Add validation
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <>
@@ -145,7 +145,7 @@ const CreateBlogForm = () => {
         />
         <Controller
           control={control}
-          name="description_en"
+          name="description"
           rules={{ required: "Description is required" }} // Add validation
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <>
@@ -172,7 +172,7 @@ const CreateBlogForm = () => {
             />
           )}
         />
-        <Button onClick={handleSubmit(onSubmit)}>Create Blog</Button>
+        <Button onClick={handleSubmit(onSubmit)}>Leave Feedback</Button>
       </div>
     </div>
   );

@@ -26,12 +26,30 @@ const register = async ({
   email: string;
   password: string;
 }) => {
-  const { data, error } = await supabase.auth.signUp({
-    email,
-    password,
-  });
-  if (error) throw new Error(error.message);
-  return data;
+  try {
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: `${window.location.origin}/auth/callback`,
+      },
+    });
+
+    if (error) {
+      console.error("Detailed error:", {
+        message: error.message,
+        status: error.status,
+        name: error.name,
+      });
+      throw error;
+    }
+
+    console.log("Registration response:", data);
+    return data;
+  } catch (err) {
+    console.error("Caught error:", err);
+    throw err;
+  }
 };
 
 export const ProfileForm = () => {

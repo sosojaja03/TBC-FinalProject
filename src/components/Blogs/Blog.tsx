@@ -14,15 +14,15 @@ dayjs.extend(relativeTime);
 type SingleBlog = {
   created_at: string;
   id: number;
-  description_en: string | null;
+  description: string | null;
   description_ka: string | null;
   image_url: string | null;
-  title_en: string | null;
+  title: string | null;
   title_ka: string | null;
   user_id: string | null;
 };
 
-type BlogsFilterFormValues = {
+type BooksFilterFormValues = {
   searchText: string;
 };
 
@@ -54,11 +54,11 @@ const formatBlogDate = (dateString: string) => {
   return blogDate.format("HH:mm - DD/MM/YYYY");
 };
 
-const fetchBlogs = async (searchText?: string): Promise<SingleBlog[]> => {
-  // If no search text, fetch all blogs
+const fetchBooks = async (searchText?: string): Promise<SingleBlog[]> => {
+  // If no search text, fetch all Books
   if (!searchText || searchText.trim() === "") {
     const { data, error } = await supabase
-      .from("blogs")
+      .from("Books")
       .select("*")
       .order("created_at", { ascending: false });
 
@@ -66,11 +66,11 @@ const fetchBlogs = async (searchText?: string): Promise<SingleBlog[]> => {
     return data as SingleBlog[];
   }
 
-  // If search text is provided, filter blogs
+  // If search text is provided, filter Books
   const { data, error } = await supabase
-    .from("blogs")
+    .from("Books")
     .select("*")
-    .or(`title_en.ilike.%${searchText}%, description_en.ilike.%${searchText}%`)
+    .or(`title.ilike.%${searchText}%, description.ilike.%${searchText}%`)
     .order("created_at", { ascending: false });
 
   if (error) throw error;
@@ -85,7 +85,7 @@ const BlogView = () => {
     [searchParams],
   );
 
-  const { control, watch } = useForm<BlogsFilterFormValues>({
+  const { control, watch } = useForm<BooksFilterFormValues>({
     defaultValues: {
       searchText: initialParams.searchText || "",
     },
@@ -96,12 +96,12 @@ const BlogView = () => {
 
   // Use React Query to manage blog fetching
   const {
-    data: blogs = [],
+    data: Books = [],
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["blogs", { debouncedSearchText }],
-    queryFn: () => fetchBlogs(debouncedSearchText),
+    queryKey: ["Books", { debouncedSearchText }],
+    queryFn: () => fetchBooks(debouncedSearchText),
     staleTime: Infinity,
     // enabled: true,
   });
@@ -139,15 +139,15 @@ const BlogView = () => {
         />
       </div>
       <div className="flex flex-col gap-y-10 px-32">
-        {isLoading && <p className="text-center">Loading blogs...</p>}
+        {isLoading && <p className="text-center">Loading Books...</p>}
         {error && (
           <p className="text-center text-red-500">
-            Error loading blogs: {error.message}
+            Error loading Books: {error.message}
           </p>
         )}
-        {blogs.map((blog) => {
+        {Books.map((blog) => {
           const blogImageUrl = blog?.image_url
-            ? `${import.meta.env.VITE_SUPABASE_BLOG_IMAGES_STORAGE_URL}/${blog?.image_url}`
+            ? `${import.meta.env.VITE_SUPABASE_BOOKS_IMAGES_STORAGE_URL}/${blog?.image_url}`
             : "";
 
           return (
@@ -160,20 +160,20 @@ const BlogView = () => {
                   <img
                     className="max-h-96 w-full border border-black object-cover"
                     src={blogImageUrl}
-                    alt={blog?.title_en || "Blog image"}
+                    alt={blog?.title || "Blog image"}
                   />
                 </div>
               )}
-              <div className="text-xl font-bold">{blog?.title_en}</div>
-              <div className="text-gray-700">{blog?.description_en}</div>
+              <div className="text-xl font-bold">{blog?.title}</div>
+              <div className="text-gray-700">{blog?.description}</div>
               <div className="text-sm text-gray-500">
                 {formatBlogDate(blog.created_at)}
               </div>
             </div>
           );
         })}
-        {blogs.length === 0 && !isLoading && (
-          <p className="text-center text-gray-500">No blogs found</p>
+        {Books.length === 0 && !isLoading && (
+          <p className="text-center text-gray-500">No Books found</p>
         )}
       </div>
     </div>

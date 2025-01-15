@@ -167,7 +167,7 @@ export const NavBar: React.FC = () => {
                 <Button className="bg-blue-500" onClick={() => handleLogOut()}>
                   LogOut
                 </Button>
-                <NavLink to="AvatarView">
+                <NavLink to="ProfileView">
                   <Avatar className="bg-red-600">
                     <AvatarImage src={user.avatarUrl} alt="Profile" />
                   </Avatar>

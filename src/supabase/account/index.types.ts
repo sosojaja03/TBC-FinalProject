@@ -1,9 +1,11 @@
 export type ProfilePayload = {
+  id: string;
   email: string;
   username: string;
   avatar_url: string;
-  full_name_ka: string;
-  full_name_en: string;
+  full_name: string;
   phone: string;
-  customAvatarUrl: string;
+  website: string;
+  updated_at: string;
+  password: string;
 };

@@ -28,7 +28,8 @@
 //   return data;
 // };
 import { supabase } from "@/supabase";
-import { ProfilePayload } from "./ProfileTypes";
+// import { ProfilePayload } from "./ProfileTypes";
+import { ProfilePayload } from "@/supabase/account/index.types";
 
 export const getProfileInfo = async (
   userId: string,
@@ -41,8 +42,6 @@ export const getProfileInfo = async (
   if (error) throw error;
   return data.map((profile) => ({
     ...profile,
-    phone: profile.phone_number,
-    customAvatarUrl: profile.avatar_url,
   })) as ProfilePayload[];
 };
 
@@ -52,9 +51,8 @@ export const fillProfileInfo = async (
   const { data, error } = await supabase.from("profiles").upsert({
     id: profileData.id,
     username: profileData.username,
+    full_name: profileData.full_name,
     email: profileData.email,
-    full_name_en: profileData.full_name_en,
-    full_name_ka: profileData.full_name_ka,
     phone: profileData.phone,
     avatar_url: profileData.avatar_url,
   });
