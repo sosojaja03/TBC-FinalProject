@@ -74,8 +74,6 @@ function App() {
               />
               <Route path="MainPage" element={<MainPage />}></Route>
               <Route path="BlogList" element={<BlogView />}></Route>
-              {/* <Route path="CreateBlog" element={<CreateBlogForm />}></Route> */}
-              {/* <Route path="AvatarView" element={<Homeview />}></Route> */}
               <Route path="ProfileView" element={<ProfileView />} />
 
               <Route path="author/:authorId" element={<AuthorPage />}></Route>
