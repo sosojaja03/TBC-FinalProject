@@ -147,12 +147,12 @@ export const NavBar: React.FC = () => {
                 </NavLink>
               </li>
               <li>
-                <NavLink to="/BlogList">
+                <NavLink to="/dashboard/BlogList">
                   <Trans>nav-Translation.Write</Trans>
                 </NavLink>
               </li>
               <li>
-                <NavLink to="/about">
+                <NavLink to="/dashboard/about">
                   <Trans>nav-Translation.About</Trans>
                 </NavLink>
               </li>
@@ -167,7 +167,7 @@ export const NavBar: React.FC = () => {
                 <Button className="bg-blue-500" onClick={() => handleLogOut()}>
                   LogOut
                 </Button>
-                <NavLink to="ProfileView">
+                <NavLink to="/dashboard/ProfileView">
                   <Avatar className="bg-red-600">
                     <AvatarImage src={user.avatarUrl} alt="Profile" />
                   </Avatar>

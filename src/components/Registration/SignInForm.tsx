@@ -89,7 +89,7 @@ export const SignInForm = () => {
     onSuccess: (data) => {
       console.log("User logged in:", data);
       // navigate("/dashboard"); // Redirect after successful login
-      navigate("/MainPage");
+      navigate("/dashboard/MainPage");
     },
   });
 

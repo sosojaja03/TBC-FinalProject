@@ -65,7 +65,7 @@ export const ProfileView = () => {
           setProfilePayload({ ...profilePayload, email: e.target.value })
         }
       />
-      {/*<label>Pasword</label>
+      {/* <label>Pasword</label>
       <input
         className="border border-black bg-white dark:border-white dark:text-black"
         type="password"

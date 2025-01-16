@@ -8,7 +8,7 @@ const SignIn: React.FC = () => {
   const navigate = useNavigate();
 
   const handleSignIn = () => {
-    navigate("/sign-in"); // Navigate to the Sign In page
+    navigate("/auth/sign-in"); // Navigate to the Sign In page
     console.log("SignIn");
   };
 
