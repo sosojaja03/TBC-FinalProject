@@ -107,7 +107,7 @@
 //     </div>
 //   );
 // };
-import { Search } from "lucide-react";
+import { SquarePlus } from "lucide-react";
 import Language from "./Language";
 import { ModeToggle } from "./mode-toggle";
 import { Trans, useTranslation } from "react-i18next";
@@ -159,7 +159,9 @@ export const NavBar: React.FC = () => {
             </ul>
           </div>
           <div className="flex items-center gap-2">
-            <Search className="h-[26px] w-[26px] text-gray-400" />
+            <NavLink to="/dashboard/BlogList">
+              <SquarePlus className="mr-2 h-8 w-8 text-gray-700" />
+            </NavLink>
             <Language />
             <ModeToggle />
             {user ? (
