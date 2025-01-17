@@ -10,7 +10,7 @@ import { useSearchParams } from "react-router-dom";
 import qs from "qs";
 import { Controller, useForm } from "react-hook-form";
 
-const API_KEY = "AIzaSyAJwoTQJtTmth9fzv5ZMk-r77Gxs0rexkM";
+const API_KEY = import.meta.env.VITE_GOOGLE_BOOKS_API_KEY;
 
 const useDebounce = (value: string, delay: number) => {
   const [debouncedValue, setDebouncedValue] = useState(value);
