@@ -1,7 +1,6 @@
 import { ProfilePayload } from "@/supabase/account/index.types";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-// import { fillProfileInfo } from "@/supabase/account";
 import { fillProfileInfo, getProfileInfo } from "../oldcode";
 import { useAuthContext } from "@/components/context";
 
@@ -16,75 +15,99 @@ export const ProfileView = () => {
     phone: "",
     website: "",
     updated_at: "",
-    password: "",
+  });
+
+  // Replace useEffect with useQuery for better data fetching
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["profile", user?.id],
+    queryFn: () => getProfileInfo(user?.id || ""),
+    enabled: !!user?.id,
   });
 
   useEffect(() => {
-    if (user) {
-      getProfileInfo(user.id).then((data) => {
-        setProfilePayload(data[0]);
-      });
+    if (data?.[0]) {
+      setProfilePayload(data[0]);
     }
-  }, [user]);
+  }, [data]);
 
-  const { mutate: handeFillProfileInfo } = useMutation({
+  const { mutate: handleFillProfileInfo, isPending: isUpdating } = useMutation({
     mutationKey: ["updateProfile"],
     mutationFn: fillProfileInfo,
+    onError: (error) => {
+      console.error("Failed to update profile:", error);
+    },
   });
 
   const handleSubmit = () => {
-    handeFillProfileInfo({ ...profilePayload, id: user?.id || "" });
+    if (!user?.id) return;
+    handleFillProfileInfo({ ...profilePayload, id: user.id });
   };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setProfilePayload((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error loading profile. Please try again.</div>;
+  }
 
   return (
     <div className="flex flex-col items-center justify-center gap-y-4">
-      <label>UserName</label>
+      <label htmlFor="username">UserName</label>
       <input
-        className="border border-black bg-white dark:border-white dark:text-black"
+        id="username"
+        className="border border-black bg-white p-2 dark:border-white dark:text-black"
         name="username"
         value={profilePayload.username}
-        onChange={(e) =>
-          setProfilePayload({ ...profilePayload, username: e.target.value })
-        }
+        onChange={handleInputChange}
+        disabled={isUpdating}
       />
-      <label>FullName</label>
+
+      <label htmlFor="full_name">FullName</label>
       <input
-        className="border border-black bg-white dark:border-white dark:text-black"
+        id="full_name"
+        className="border border-black bg-white p-2 dark:border-white dark:text-black"
         name="full_name"
         value={profilePayload.full_name}
-        onChange={(e) =>
-          setProfilePayload({ ...profilePayload, full_name: e.target.value })
-        }
+        onChange={handleInputChange}
+        disabled={isUpdating}
       />
-      <label>Email</label>
+
+      <label htmlFor="email">Email</label>
       <input
-        className="border border-black bg-white dark:border-white dark:text-black"
-        name="username"
+        id="email"
+        className="border border-black bg-white p-2 dark:border-white dark:text-black"
+        name="email"
         value={profilePayload.email}
-        onChange={(e) =>
-          setProfilePayload({ ...profilePayload, email: e.target.value })
-        }
+        onChange={handleInputChange}
+        disabled={isUpdating}
       />
-      {/* <label>Pasword</label>
+
+      <label htmlFor="avatar_url">Avatar URL</label>
       <input
-        className="border border-black bg-white dark:border-white dark:text-black"
-        type="password"
-        name="password"
-        value={profilePayload.password}
-        onChange={(e) =>
-          setProfilePayload({ ...profilePayload, password: e.target.value })
-        }
-      /> */}
-      <label>Avatar Url</label>
-      <input
-        className="border border-black bg-white dark:border-white dark:text-black"
+        id="avatar_url"
+        className="border border-black bg-white p-2 dark:border-white dark:text-black"
         name="avatar_url"
         value={profilePayload.avatar_url}
-        onChange={(e) =>
-          setProfilePayload({ ...profilePayload, avatar_url: e.target.value })
-        }
+        onChange={handleInputChange}
+        disabled={isUpdating}
       />
-      <button onClick={handleSubmit}>Submit</button>
+
+      <button
+        onClick={handleSubmit}
+        disabled={isUpdating}
+        className="mt-4 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 disabled:bg-gray-400"
+      >
+        {isUpdating ? "Updating..." : "Submit"}
+      </button>
     </div>
   );
 };

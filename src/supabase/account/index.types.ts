@@ -7,5 +7,4 @@ export type ProfilePayload = {
   phone: string;
   website: string;
   updated_at: string;
-  password: string;
 };
