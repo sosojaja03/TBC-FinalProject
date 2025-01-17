@@ -64,7 +64,7 @@ export const SignInForm = () => {
 
   const handleReg = () => {
     console.log("Navigating to registration form...");
-    navigate("/registration"); // Navigate to the registration form/page
+    navigate("/auth/registration"); // Navigate to the registration form/page
   };
 
   // 1. Define your form.

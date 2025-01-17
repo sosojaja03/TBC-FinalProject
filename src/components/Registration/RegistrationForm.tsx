@@ -78,7 +78,7 @@ export const ProfileForm = () => {
     onSuccess: (data) => {
       console.log("User created:", data);
       // navigate("/welcome"); // Redirect after successful registration
-      navigate("/sign-in");
+      navigate("/auth/sign-in");
     },
   });
 
@@ -148,7 +148,7 @@ export const ProfileForm = () => {
           </p>
         )}{" "}
       </form>
-      <Button className="mt-5 w-80" onClick={() => navigate("/sign-in")}>
+      <Button className="mt-5 w-80" onClick={() => navigate("/auth/sign-in")}>
         Sign In
       </Button>
     </Form>

@@ -60,41 +60,61 @@ export const ProfileView = () => {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center gap-y-4">
-      <label htmlFor="username">UserName</label>
+    <div className="flex flex-col items-center justify-center gap-y-6 rounded-lg bg-card p-6 shadow-lg">
+      <label
+        htmlFor="username"
+        className="text-lg font-medium text-gray-800 dark:text-gray-200"
+      >
+        UserName
+      </label>
       <input
         id="username"
-        className="border border-black bg-white p-2 dark:border-white dark:text-black"
+        className="w-full max-w-md rounded-lg border border-gray-400 bg-white p-3 text-gray-800 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
         name="username"
         value={profilePayload.username}
         onChange={handleInputChange}
         disabled={isUpdating}
       />
 
-      <label htmlFor="full_name">FullName</label>
+      <label
+        htmlFor="full_name"
+        className="text-lg font-medium text-gray-800 dark:text-gray-200"
+      >
+        FullName
+      </label>
       <input
         id="full_name"
-        className="border border-black bg-white p-2 dark:border-white dark:text-black"
+        className="w-full max-w-md rounded-lg border border-gray-400 bg-white p-3 text-gray-800 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
         name="full_name"
         value={profilePayload.full_name}
         onChange={handleInputChange}
         disabled={isUpdating}
       />
 
-      <label htmlFor="email">Email</label>
+      <label
+        htmlFor="email"
+        className="text-lg font-medium text-gray-800 dark:text-gray-200"
+      >
+        Email
+      </label>
       <input
         id="email"
-        className="border border-black bg-white p-2 dark:border-white dark:text-black"
+        className="w-full max-w-md rounded-lg border border-gray-400 bg-white p-3 text-gray-800 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
         name="email"
         value={profilePayload.email}
         onChange={handleInputChange}
         disabled={isUpdating}
       />
 
-      <label htmlFor="avatar_url">Avatar URL</label>
+      <label
+        htmlFor="avatar_url"
+        className="text-lg font-medium text-gray-800 dark:text-gray-200"
+      >
+        Avatar URL
+      </label>
       <input
         id="avatar_url"
-        className="border border-black bg-white p-2 dark:border-white dark:text-black"
+        className="w-full max-w-md rounded-lg border border-gray-400 bg-white p-3 text-gray-800 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
         name="avatar_url"
         value={profilePayload.avatar_url}
         onChange={handleInputChange}
@@ -104,7 +124,7 @@ export const ProfileView = () => {
       <button
         onClick={handleSubmit}
         disabled={isUpdating}
-        className="mt-4 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 disabled:bg-gray-400"
+        className="mt-6 w-full max-w-md rounded-lg bg-blue-500 px-6 py-3 text-lg font-semibold text-white shadow-md hover:bg-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-300 disabled:cursor-not-allowed disabled:bg-gray-400 dark:focus:ring-blue-800"
       >
         {isUpdating ? "Updating..." : "Submit"}
       </button>

@@ -232,7 +232,7 @@ export const MainPage: React.FC = () => {
           ) : filteredBooks.length > 0 ? (
             <div
               ref={parentRef}
-              className="h-[500px] overflow-auto rounded-lg bg-gray-50 p-2"
+              className="bg-white-50 h-[500px] overflow-auto rounded-lg bg-card p-2"
             >
               <div
                 style={{
@@ -264,14 +264,14 @@ export const MainPage: React.FC = () => {
                       {booksInRow.map((book, index) => (
                         <div
                           key={index}
-                          className="m-6 flex-1 rounded-lg border border-gray-200 bg-white p-4 shadow-lg transition-all duration-200 hover:scale-[1.02] hover:shadow-xl"
+                          className="m-6 flex-1 rounded-lg border border-gray-200 bg-card p-4 shadow-lg transition-all duration-200 hover:scale-[1.02] hover:shadow-xl dark:border-neutral-800"
                           style={{
                             flexBasis: "calc(50% - 0.5rem)",
                             // Each card takes half the widt
                             // mh
                           }}
                         >
-                          <div className="flex h-full flex-col">
+                          <div className="flex h-full flex-col bg-card">
                             <div className="group relative mb-4 flex h-48 items-center justify-center overflow-hidden rounded-lg bg-gray-100">
                               <img
                                 src={
