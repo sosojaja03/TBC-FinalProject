@@ -1,4 +1,4 @@
-import { SquarePlus } from "lucide-react";
+import { Plus } from "lucide-react";
 import Language from "./Language";
 import { ModeToggle } from "./mode-toggle";
 import { Trans, useTranslation } from "react-i18next";
@@ -52,7 +52,10 @@ export const NavBar: React.FC = () => {
           </div>
           <div className="flex items-center gap-2">
             <NavLink to="/dashboard/BlogList">
-              <SquarePlus className="mr-2 h-8 w-8 text-gray-700" />
+              <Button variant="outline">
+                Create Review
+                <Plus className="h-[2.2rem] w-[2.2rem]" />
+              </Button>
             </NavLink>
             <Language />
             <ModeToggle />

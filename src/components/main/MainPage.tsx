@@ -2,13 +2,20 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Card } from "../ui/card";
 import { Trans, useTranslation } from "react-i18next";
-import { Search } from "lucide-react";
+import { Search, X } from "lucide-react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { useSearchParams } from "react-router-dom";
 import qs from "qs";
 import { Controller, useForm } from "react-hook-form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 const API_KEY = import.meta.env.VITE_GOOGLE_BOOKS_API_KEY;
 
@@ -171,11 +178,6 @@ export const MainPage: React.FC = () => {
   //   }
   // };
 
-  const handleCategorySelect = (category: string) => {
-    const newCategory = category === selectedCategory ? "" : category;
-    setSelectedCategory(newCategory);
-  };
-
   // Virtualizer configuration
   const rowVirtualizer = useVirtualizer({
     // count: filteredBooks.length, // Total posts count
@@ -185,12 +187,21 @@ export const MainPage: React.FC = () => {
     overscan: 5,
   });
 
+  const handleCategorySelect = (category: string) => {
+    const newCategory = category === selectedCategory ? "" : category;
+    setSelectedCategory(newCategory);
+  };
+
+  const clearCategory = () => {
+    setSelectedCategory("");
+  };
+
   return (
     <main className="container mx-auto flex flex-col gap-6 px-2 py-8 lg:flex-row">
       <div className="flex-1">
         <div className="space-y-6 bg-background text-foreground">
-          <div className="mb-6">
-            <div className="relative mb-4">
+          <div className="flex items-center gap-4">
+            <div className="relative flex-1">
               <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
               <Controller
                 control={control}
@@ -202,27 +213,43 @@ export const MainPage: React.FC = () => {
                     className="pl-10"
                     value={value}
                     onChange={(e) => {
-                      onChange(e); // Update the form state
-                      fetchBooks(e.target.value); // Fetch books on input change
+                      onChange(e);
+                      fetchBooks(e.target.value);
                     }}
                   />
                 )}
               />
             </div>
             {categories.length > 0 && (
-              <div className="flex flex-wrap gap-2">
-                {categories.map((category) => (
-                  <Button
-                    key={category}
-                    variant={
-                      selectedCategory === category ? "default" : "outline"
-                    }
-                    onClick={() => handleCategorySelect(category)}
-                    className="text-sm"
+              <div className="flex items-center gap-2">
+                <div className="w-48">
+                  <Select
+                    value={selectedCategory}
+                    onValueChange={handleCategorySelect}
                   >
-                    {category}
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {categories.map((category) => (
+                        <SelectItem key={category} value={category}>
+                          {category}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {selectedCategory && (
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={clearCategory}
+                    className="h-10 w-10"
+                  >
+                    <X className="h-4 w-4" />
                   </Button>
-                ))}
+                )}
               </div>
             )}
           </div>
