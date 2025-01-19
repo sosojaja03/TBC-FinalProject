@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import image1 from "../../assets/1.png";
 import image2 from "../../assets/2.png";
@@ -22,6 +22,7 @@ const mockData = [
     id: 3,
     title: "Slide 3",
     description: "This is the third slide",
+    
   },
 ];
 
