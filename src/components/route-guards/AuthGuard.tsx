@@ -2,7 +2,9 @@ import React, { PropsWithChildren } from "react";
 import { UseAuthContext } from "../context/hooks/AuthContextHook";
 import { Navigate, Outlet } from "react-router-dom";
 
-export const AuthGuard: React.FC<PropsWithChildren> = ({ children }) => {
+export const IsAuthorisedGuard: React.FC<PropsWithChildren> = ({
+  children,
+}) => {
   const { user } = UseAuthContext();
   if (!user) {
     return <Navigate to="/auth/sign-in" replace />;

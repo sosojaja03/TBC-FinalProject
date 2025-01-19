@@ -22,7 +22,7 @@ const mockData = [
     id: 3,
     title: "Slide 3",
     description: "This is the third slide",
-    
+    image: image1,
   },
 ];
 

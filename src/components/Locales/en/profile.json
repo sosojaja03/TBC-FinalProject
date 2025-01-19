@@ -1,0 +1,28 @@
+{
+  "profile": {
+    "username": {
+      "required": "Username is required"
+    },
+    "fullname": {
+      "required": "Full name is required"
+    },
+    "email": {
+      "required": "Email is required",
+      "invalid": "Invalid email address"
+    },
+    "labels": {
+      "username": "Username",
+      "fullname": "Full Name",
+      "email": "Email",
+      "avatar": "Avatar URL"
+    },
+    "error": {
+      "loading": "Error loading profile. Please try again."
+    }
+  },
+  "common": {
+    "loading": "Loading...",
+    "updating": "Updating...",
+    "submit": "Submit"
+  }
+}

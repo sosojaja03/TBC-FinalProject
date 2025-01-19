@@ -6,6 +6,8 @@ import mainTranslationKa from "@/components/Locales/ka/main.json";
 import mainTranslationEn from "@/components/Locales/en/main.json";
 import SignIn_SignUpEn from "@/components/Locales/en/SignIn-SignUp.json";
 import SignIn_SignUpKa from "@/components/Locales/ka/SignIn-SignUp.json";
+import profile_ka from "@/components/Locales/ka/profile.json";
+import profile_en from "@/components/Locales/en/profile.json";
 import LanguageDetector from "i18next-browser-languagedetector";
 
 const options = {
@@ -33,6 +35,7 @@ i18n
           "nav-Translation": navTranslationKa,
           "MainPage-Translation": mainTranslationKa,
           "SignIn-SignUp-Translation": SignIn_SignUpKa,
+          "Profile-Translation": profile_ka,
         },
       },
       en: {
@@ -40,6 +43,7 @@ i18n
           "nav-Translation": navTranslationEn,
           "MainPage-Translation": mainTranslationEn,
           "SignIn-SignUp-Translation": SignIn_SignUpEn,
+          "Profile-Translation": profile_en,
         },
       },
     },

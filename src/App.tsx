@@ -7,18 +7,18 @@ import RegistrationForm from "./components/Registration/Registration";
 import AboutPage from "./components/About/About";
 import AuthorPage from "./components/AuthorPage/SingleAuthor";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
-import { supabase } from "./supabase";
-import { UseAuthContext } from "./components/context/hooks/AuthContextHook";
 import {
-  AuthGuard,
+  IsAuthorisedGuard,
   IsUnAuthorisedGuard,
 } from "./components/route-guards/AuthGuard";
 // import Homeview from "./components/Profile/AvatarView";
 import BlogView from "./components/Blogs/Blog";
-import { ProfileView } from "./components/Profile/view/profile";
+import ProfileView from "./components/Profile/view/profile";
 import { AuthLayout } from "./components/Layout/authLayout";
-// import ProfilePage from "./components/Profile/ProfilePage";
+import { useEffect, useState } from "react";
+import { supabase } from "./supabase";
+import { UseAuthContext } from "./components/context/hooks/AuthContextHook";
+// import { AppRoutes } from "./components/Routes";
 
 const queryClient = new QueryClient();
 
@@ -45,6 +45,8 @@ function App() {
     return <div>Loading...</div>;
   }
 
+  // return <AppRoutes />;
+
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
@@ -70,13 +72,14 @@ function App() {
               <Route path="sign-in" element={<SignInPage />} />
               <Route path="registration" element={<RegistrationForm />} />
             </Route>
+
             {/* Dashboard routes */}
             <Route
               path="/dashboard/*"
               element={
-                <AuthGuard>
+                <IsAuthorisedGuard>
                   <Layout />
-                </AuthGuard>
+                </IsAuthorisedGuard>
               }
             >
               <Route path="MainPage" element={<MainPage />}></Route>
