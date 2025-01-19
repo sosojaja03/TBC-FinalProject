@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Card } from "../ui/card";
 import { Trans, useTranslation } from "react-i18next";
-import { Search, X } from "lucide-react";
+import { Search, X, ShoppingCart, Plus, Minus, Trash2 } from "lucide-react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { useVirtualizer } from "@tanstack/react-virtual";
@@ -16,6 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import Slider from "./slider";
 
 const API_KEY = import.meta.env.VITE_GOOGLE_BOOKS_API_KEY;
 
@@ -35,31 +36,37 @@ const useDebounce = (value: string, delay: number) => {
   return debouncedValue;
 };
 
+interface Book {
+  id: string;
+  volumeInfo: {
+    title: string;
+    authors?: string[];
+    publishedDate?: string;
+    description?: string;
+    categories?: string[];
+    imageLinks?: {
+      thumbnail?: string;
+    };
+  };
+}
+
 export const MainPage: React.FC = () => {
   const parentRef = useRef<HTMLDivElement>(null);
-
   const { t } = useTranslation();
-  interface Book {
-    id: string;
-    volumeInfo: {
-      title: string;
-      authors?: string[];
-      publishedDate?: string;
-      description?: string;
-      categories?: string[];
-      imageLinks?: {
-        thumbnail?: string;
-      };
-    };
-  }
 
   const [fetchedBooks, setFetchedBooks] = useState<Book[]>([]);
-  const [, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("");
   const [filteredBooks, setFilteredBooks] = useState<Book[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [cart, setCart] = useState<{
+    [id: string]: { book: Book; quantity: number };
+  }>(() => {
+    const userId = localStorage.getItem("userId");
+    const savedCart = localStorage.getItem(`cart_${userId}`);
+    return savedCart ? JSON.parse(savedCart) : {};
+  });
 
   const initialParams = useMemo(
     () =>
@@ -112,14 +119,57 @@ export const MainPage: React.FC = () => {
     }
   };
 
-  // Fetch books based on initial search params when the page loads
+  // Cart functions
+  const addToCart = (book: Book) => {
+    setCart((prev: { [id: string]: { book: Book; quantity: number } }) => {
+      const updatedCart = {
+        ...prev,
+        [book.id]: {
+          book,
+          quantity: (prev[book.id]?.quantity || 0) + 1,
+        },
+      };
+      const userId = localStorage.getItem("userId");
+      localStorage.setItem(`cart_${userId}`, JSON.stringify(updatedCart));
+      return updatedCart;
+    });
+  };
+
+  const updateCartQuantity = (id: string, quantity: number) => {
+    setCart((prev) => {
+      if (quantity === 0) {
+        const updatedCart = { ...prev };
+        delete updatedCart[id];
+        const userId = localStorage.getItem("userId");
+        localStorage.setItem(`cart_${userId}`, JSON.stringify(updatedCart));
+        return updatedCart;
+      }
+
+      const updatedCart = {
+        ...prev,
+        [id]: {
+          ...prev[id],
+          quantity,
+        },
+      };
+      const userId = localStorage.getItem("userId");
+      localStorage.setItem(`cart_${userId}`, JSON.stringify(updatedCart));
+      return updatedCart;
+    });
+  };
+
+  const clearCart = () => {
+    setCart({});
+    const userId = localStorage.getItem("userId");
+    localStorage.removeItem(`cart_${userId}`);
+  };
+
   useEffect(() => {
     const initialSearchText = initialParams.searchText || "";
     const initialCategory = initialParams.category || "";
 
     if (initialSearchText) {
       fetchBooks(initialSearchText);
-      setSearchTerm(initialSearchText);
     } else {
       fetchBooks();
     }
@@ -129,7 +179,6 @@ export const MainPage: React.FC = () => {
     }
   }, [initialParams.searchText, initialParams.category]);
 
-  // Filter books whenever fetchedBooks, debouncedSearchText, or selectedCategory changes
   useEffect(() => {
     const filtered = fetchedBooks.filter((book) => {
       const titleMatch = book.volumeInfo.title
@@ -171,19 +220,10 @@ export const MainPage: React.FC = () => {
     { id: "3", name: "Malcolm Gladwell", role: "Non-fiction Author" },
   ];
 
-  // const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   setSearchTerm(e.target.value);
-  //   if (e.target.value.length > 2) {
-  //     fetchBooks(e.target.value);
-  //   }
-  // };
-
-  // Virtualizer configuration
   const rowVirtualizer = useVirtualizer({
-    // count: filteredBooks.length, // Total posts count
-    count: Math.ceil(filteredBooks.length / 2), // Number of rows needed for two books per row
+    count: Math.ceil(filteredBooks.length / 2),
     getScrollElement: () => parentRef.current,
-    estimateSize: () => 500, // Estimated height for each post card
+    estimateSize: () => 500,
     overscan: 5,
   });
 
@@ -199,6 +239,7 @@ export const MainPage: React.FC = () => {
   return (
     <main className="container mx-auto flex flex-col gap-6 px-2 py-8 lg:flex-row">
       <div className="flex-1">
+        <Slider />
         <div className="space-y-6 bg-background text-foreground">
           <div className="flex items-center gap-4">
             <div className="relative flex-1">
@@ -268,10 +309,10 @@ export const MainPage: React.FC = () => {
                 }}
               >
                 {rowVirtualizer.getVirtualItems().map((virtualRow) => {
-                  const startBookIndex = virtualRow.index * 2; // Start index for two books per row
+                  const startBookIndex = virtualRow.index * 2;
                   const booksInRow = filteredBooks.slice(
                     startBookIndex,
-                    startBookIndex + 2, // Get two books per virtual row
+                    startBookIndex + 2,
                   );
 
                   return (
@@ -284,8 +325,8 @@ export const MainPage: React.FC = () => {
                         width: "100%",
                         height: `${virtualRow.size}px`,
                         transform: `translateY(${virtualRow.start}px)`,
-                        display: "flex", // Use flexbox for two-column layout
-                        gap: "1rem", // Space between book cards
+                        display: "flex",
+                        gap: "1rem",
                       }}
                     >
                       {booksInRow.map((book, index) => (
@@ -294,8 +335,6 @@ export const MainPage: React.FC = () => {
                           className="m-6 flex-1 rounded-lg border border-gray-200 bg-card p-4 shadow-lg transition-all duration-200 hover:scale-[1.02] hover:shadow-xl dark:border-neutral-800"
                           style={{
                             flexBasis: "calc(50% - 0.5rem)",
-                            // Each card takes half the widt
-                            // mh
                           }}
                         >
                           <div className="flex h-full flex-col bg-card">
@@ -332,17 +371,26 @@ export const MainPage: React.FC = () => {
                                 "No description available"}
                             </p>
 
-                            <div className="mt-auto flex flex-wrap gap-2">
-                              {book.volumeInfo.categories?.map(
-                                (category, i) => (
-                                  <span
-                                    key={i}
-                                    className="rounded-full bg-blue-100 px-3 py-1 text-xs text-blue-700"
-                                  >
-                                    {category}
-                                  </span>
-                                ),
-                              )}
+                            <div className="mt-auto">
+                              <div className="mb-4 flex flex-wrap gap-2">
+                                {book.volumeInfo.categories?.map(
+                                  (category, i) => (
+                                    <span
+                                      key={i}
+                                      className="rounded-full bg-blue-100 px-3 py-1 text-xs text-blue-700"
+                                    >
+                                      {category}
+                                    </span>
+                                  ),
+                                )}
+                              </div>
+                              <Button
+                                className="w-full"
+                                onClick={() => addToCart(book)}
+                              >
+                                <ShoppingCart className="mr-2 h-4 w-4" />
+                                Add to Cart
+                              </Button>
                             </div>
                           </div>
                         </div>
@@ -362,6 +410,77 @@ export const MainPage: React.FC = () => {
 
       <div className="w-full space-y-6 lg:w-96">
         <Card className="border-gray-800 bg-card p-4">
+          <h3 className="mb-4 text-lg font-semibold">
+            <ShoppingCart className="mr-2 inline-block h-5 w-5" />
+            Cart
+          </h3>
+          {Object.keys(cart).length === 0 ? (
+            <p className="text-gray-500">Your cart is empty</p>
+          ) : (
+            <div className="space-y-4">
+              {Object.values(cart).map(({ book, quantity }) => (
+                <div
+                  key={book.id}
+                  className="flex items-start space-x-4 rounded-lg border p-2"
+                >
+                  <img
+                    src={
+                      book.volumeInfo.imageLinks?.thumbnail ||
+                      "/api/placeholder/100/150"
+                    }
+                    alt={book.volumeInfo.title}
+                    className="h-24 w-16 rounded object-cover"
+                  />
+                  <div className="flex-1">
+                    <h4 className="line-clamp-2 font-medium">
+                      {book.volumeInfo.title}
+                    </h4>
+                    <p className="text-sm text-gray-500">
+                      {book.volumeInfo.authors?.[0]}
+                    </p>
+                    <div className="mt-2 flex items-center space-x-2">
+                      <Button
+                        size="icon"
+                        variant="outline"
+                        onClick={() =>
+                          updateCartQuantity(book.id, quantity - 1)
+                        }
+                      >
+                        <Minus className="h-4 w-4" />
+                      </Button>
+                      <span className="w-8 text-center">{quantity}</span>
+                      <Button
+                        size="icon"
+                        variant="outline"
+                        onClick={() =>
+                          updateCartQuantity(book.id, quantity + 1)
+                        }
+                      >
+                        <Plus className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        size="icon"
+                        variant="destructive"
+                        onClick={() => updateCartQuantity(book.id, 0)}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+              <Button
+                className="mt-4 w-full"
+                variant="destructive"
+                onClick={clearCart}
+              >
+                Clear Cart
+              </Button>
+            </div>
+          )}
+        </Card>
+
+        <Card className="border-gray-800 bg-card p-4">
           <h3 className="mb-4 font-semibold">
             <Trans>Popular Categories</Trans>
           </h3>
@@ -378,6 +497,7 @@ export const MainPage: React.FC = () => {
             ))}
           </div>
         </Card>
+
         <Card className="border-gray-800 bg-card p-4">
           <h3 className="mb-4 font-semibold">
             <Trans>Featured Authors</Trans>

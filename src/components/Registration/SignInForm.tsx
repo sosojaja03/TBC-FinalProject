@@ -34,6 +34,7 @@ const login = async ({
     password,
   });
   if (error) throw new Error(error.message);
+  localStorage.setItem("userId", data.user.id);
   return data;
 };
 
@@ -42,6 +43,7 @@ export const logout = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) throw error;
     console.log("Successfully logged out");
+    localStorage.removeItem("userId");
   } catch (error) {
     console.error("Error logging out:", error);
   }
