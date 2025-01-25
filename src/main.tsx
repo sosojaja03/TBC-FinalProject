@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import "@/components/Locales";
-import { AuthProvider } from "./components/Context/index";
+import { AuthProvider } from "./components/Context";
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <AuthProvider>

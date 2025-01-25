@@ -5,11 +5,11 @@ import {
   fillProfileInfo,
   getProfileInfo,
 } from "@/components/Pages/Profile/index";
-import { useAuthContext } from "@/components/Context";
+import { UseAuthContext } from "@/components/Context/hooks/AuthContextHook";
 import { useTranslation } from "react-i18next";
 
 const ProfileView = () => {
-  const { user } = useAuthContext();
+  const { user } = UseAuthContext();
   const { t } = useTranslation();
   const [profilePayload, setProfilePayload] = useState<ProfilePayload>({
     id: "",

@@ -3,7 +3,7 @@ import Language from "./Language";
 import { ModeToggle } from "./mode-toggle";
 import { useTranslation } from "react-i18next";
 import { Link, NavLink } from "react-router-dom";
-import { useAuthContext } from "../Context/index";
+import { UseAuthContext } from "../Context/hooks/AuthContextHook";
 import { Button } from "../ui/button";
 import { useMutation } from "@tanstack/react-query";
 import { logout } from "../Authorisation/SignIn/SignInForm";
@@ -14,7 +14,7 @@ import { useState } from "react";
 
 export const NavBar: React.FC = () => {
   useTranslation();
-  const { user, handleSetUser } = useAuthContext();
+  const { user, handleSetUser } = UseAuthContext();
 
   const { mutate: handleLogOut } = useMutation({
     mutationKey: ["logout"],

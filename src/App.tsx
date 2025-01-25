@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { supabase } from "./supabase";
-import { useAuthContext } from "./components/Context/index";
+import { UseAuthContext } from "./components/Context/hooks/AuthContextHook";
 import { AppRoutes } from "./components/Routes";
 import { useTranslation } from "react-i18next";
 
 function App() {
-  const { handleSetUser } = useAuthContext();
+  const { handleSetUser } = UseAuthContext();
   const [loading, setLoading] = useState(true);
   const { i18n } = useTranslation();
 

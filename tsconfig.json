@@ -19,10 +19,13 @@
     "module": "ESNext",
     "skipLibCheck": true,
     "moduleResolution": "bundler",
+    "noImplicitAny": true,
+
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
+    "noEmitOnError": true,
     "jsx": "react-jsx",
     "strict": true,
     "baseUrl": ".",

@@ -1,11 +1,11 @@
 import React, { PropsWithChildren } from "react";
-import { useAuthContext } from "../Context/index";
+import { UseAuthContext } from "../Context/hooks/AuthContextHook";
 import { Navigate, Outlet } from "react-router-dom";
 
 export const IsAuthorisedGuard: React.FC<PropsWithChildren> = ({
   children,
 }) => {
-  const { user } = useAuthContext();
+  const { user } = UseAuthContext();
   if (!user) {
     return <Navigate to="/auth/sign-in" replace />;
   }
@@ -15,7 +15,7 @@ export const IsAuthorisedGuard: React.FC<PropsWithChildren> = ({
 export const IsUnAuthorisedGuard: React.FC<PropsWithChildren> = ({
   children,
 }) => {
-  const { user } = useAuthContext();
+  const { user } = UseAuthContext();
 
   if (user) {
     return <Navigate to="/dashboard/MainPage" replace />;
