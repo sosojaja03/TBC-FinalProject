@@ -1,5 +1,5 @@
 import React, { PropsWithChildren } from "react";
-import { UseAuthContext } from "../Context/hooks/AuthContextHook";
+import { UseAuthContext } from "../Contexts/hooks/AuthContextHook";
 import { Navigate, Outlet } from "react-router-dom";
 
 export const IsAuthorisedGuard: React.FC<PropsWithChildren> = ({

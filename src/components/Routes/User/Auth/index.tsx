@@ -1,4 +1,4 @@
-import { AuthLayout } from "../../../Layout/AuthLayout";
+import { AuthLayout } from "../../../Layout/AuthLayouts";
 import { IsUnAuthorisedGuard } from "@/components/RouteGuards/AuthGuard";
 import { lazy, Suspense } from "react";
 import { Route, Navigate } from "react-router-dom";

@@ -3,7 +3,7 @@ import Language from "./Language";
 import { ModeToggle } from "./mode-toggle";
 import { useTranslation } from "react-i18next";
 import { Link, NavLink } from "react-router-dom";
-import { UseAuthContext } from "../Context/hooks/AuthContextHook";
+import { UseAuthContext } from "../Contexts/hooks/AuthContextHook";
 import { Button } from "../ui/button";
 import { useMutation } from "@tanstack/react-query";
 import { logout } from "../Authorisation/SignIn/SignInForm";

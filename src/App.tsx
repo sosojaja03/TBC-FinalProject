@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "./supabase";
-import { UseAuthContext } from "./components/Context/hooks/AuthContextHook";
+import { UseAuthContext } from "./components/Contexts/hooks/AuthContextHook";
 import { AppRoutes } from "./components/Routes";
 import { useTranslation } from "react-i18next";
 

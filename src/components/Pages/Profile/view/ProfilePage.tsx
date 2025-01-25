@@ -5,7 +5,7 @@ import {
   fillProfileInfo,
   getProfileInfo,
 } from "@/components/Pages/Profile/index";
-import { UseAuthContext } from "@/components/Context/hooks/AuthContextHook";
+import { UseAuthContext } from "@/components/Contexts/hooks/AuthContextHook";
 import { useTranslation } from "react-i18next";
 
 const ProfileView = () => {
