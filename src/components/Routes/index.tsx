@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { DASHBOARD_ROUTES } from "./User/Dashboard";
-import { ThemeProvider } from "../nav/theme-provider";
+import { ThemeProvider } from "../NavBar/theme-provider";
 import { AUTHENTICATION_ROUTES } from "./User";
 
 const queryClient = new QueryClient();

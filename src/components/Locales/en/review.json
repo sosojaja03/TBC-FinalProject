@@ -1,0 +1,16 @@
+{
+  "BookTitle": "Book Title (Required)",
+  "Description": "Description (Required)",
+  "Image": " Upload Image (Required)",
+  "LeaveFeedback": "Leave Feedback",
+  "BookTitlePlaceholder": "Enter the book title",
+  "DescriptionPlaceholder": "Enter the description",
+  "EnterSearchText": "Enter Search Text...",
+  "HoursAgo": "houres ago",
+  "Edit": "Edit",
+  "Delete": "Delete",
+  "UpdateReview": "Update Review",
+  "EditBookReview": "Edit Book Review",
+  "NoBooksFound": "No Books Found",
+  "BookReviews": "Leave Your Feedback"
+}

@@ -1,22 +1,3 @@
-// import React, { createContext, useState, PropsWithChildren } from "react";
-
-// type AuthContectUserType = any;
-
-// export const AuthContext = createContext<AuthContectUserType>(null);
-
-// export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
-//   const [user, setUser] = useState<AuthContectUserType>();
-
-//   const handleSetUser = (user: any) => {
-//     setUser(user);
-//   };
-//   return (
-//     <AuthContext.Provider value={{ user, handleSetUser }}>
-//       {children}
-//     </AuthContext.Provider>
-//   );
-// };
-
 import React, {
   createContext,
   useState,
@@ -79,7 +60,7 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
     <AuthContext.Provider
       value={{
         user,
-        handleSetUser, // Provide the session-handling function
+        handleSetUser,
         loading,
       }}
     >
@@ -87,36 +68,3 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
     </AuthContext.Provider>
   );
 };
-
-// import React, { createContext, useState, PropsWithChildren } from "react";
-
-// // Define the user type based on the expected user structure
-// interface User {
-//   id: string;
-//   name: string;
-//   email: string;
-//   // Add more properties as needed
-// }
-
-// // Define the shape of the context value
-// interface AuthContextType {
-//   user: User | null | undefined;
-//   handleSetUser: (user: User | null) => void;
-// }
-
-// // Create the context with a default value of `null`
-// export const AuthContext = createContext<AuthContextType | null>(null);
-
-// export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
-//   const [user, setUser] = useState<User | null>(null);
-
-//   const handleSetUser = (user: User | null) => {
-//     setUser(user);
-//   };
-
-//   return (
-//     <AuthContext.Provider value={{ user, handleSetUser }}>
-//       {children}
-//     </AuthContext.Provider>
-//   );
-// };

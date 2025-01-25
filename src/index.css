@@ -3,9 +3,9 @@
 @tailwind utilities;
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 48 100% 93%; /* Amber-50 */
+    --card: 33 100% 95%; /* Orange-50 */
     --foreground: 0 0% 3.9%;
-    --card: 0 0% 100%;
     --card-foreground: 0 0% 3.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 3.9%;
@@ -28,11 +28,12 @@
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
+    --amber-border: 39 94% 73%; /* Add a custom amber border color */
+    --gradient-from: 48 100% 93%;
+    --gradient-to: 33 100% 95%;
   }
   .dark {
-    --background: 0 0% 3.9%;
     --foreground: 0 0% 98%;
-    --card: 0 0% 3.9%;
     --card-foreground: 0 0% 98%;
     --popover: 0 0% 3.9%;
     --popover-foreground: 0 0% 98%;
@@ -54,11 +55,24 @@
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+    --background: 37 50% 15%; /* Darker base background */
+    --card: 37 50% 20%; /* Slightly lighter than background */
+    --amber-border: 39 94% 40%; /* Darker amber border */
+    --gradient-from: 37 50% 15%; /* Match dark background */
+    --gradient-to: 37 50% 20%; /* Match dark card */
+    --chart-4: 39 74% 45%; /* Amber-themed chart color */
+    --chart-5: 27 87% 50%; /* Warm accent color */
   }
 }
 @layer base {
   * {
     @apply border-border;
+  }
+  .amber-border {
+    border-color: hsl(var(--amber-border));
+  }
+  .bg-gradient-custom {
+    @apply bg-gradient-to-b from-[hsl(var(--gradient-from))] to-[hsl(var(--gradient-to))];
   }
   body {
     @apply bg-background text-foreground;

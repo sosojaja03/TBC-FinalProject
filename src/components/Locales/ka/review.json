@@ -1,0 +1,16 @@
+{
+  "BookTitle": "წიგნის სათაური (სავალდებულო)",
+  "Description": "აღწერა (სავალდებულო)",
+  "Image": "სურათის ატვირთვა (სავალდებულო)",
+  "LeaveFeedback": "ფიდბექის დატოვება",
+  "BookTitlePlaceholder": "შეიყვანეთ წიგნის სათაური",
+  "DescriptionPlaceholder": "შეიყვანეთ აღწერა",
+  "EnterSearchText": "შეიყვანეთ საძიებო ტექსტი...",
+  "HoursAgo": "საათის წინ",
+  "Edit": "რედაქტირება",
+  "Delete": "წაშლა",
+  "UpdateReview": "განახლება",
+  "EditBookReview": "წიგნის რევიუს რედაქტირება",
+  "NoBooksFound": "წიგნები არ მოიძებნა",
+  "BookReviews": "დატოვეთ თქვენი ფიდბექი"
+}

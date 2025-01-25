@@ -14,5 +14,40 @@
     "Machine Learning": "Machine Learning",
     "Markets": "Markets",
     "Analysis": "Analysis"
+  },
+  "Cart": "Cart",
+  "AddtoCart": "Add to Cart",
+  "SelectCategory": "Select Category",
+  "PopularCategories": "Popular Categories",
+  "EmptyCart": "Your cart is empty",
+  "ClearCart": "Clear Cart",
+  "FeaturedAuthors": "Featured Authors",
+  "SearchBooks": "Search any book",
+  "NoBooksFound": "No books found",
+  "LoadingBooks": "Loading Books",
+  "NoDescription": "No Description",
+  "NoAuthors": "No Authors",
+  "BestSellers": "Best Sellers",
+  "Books": {
+    "GreatGatsby": {
+      "Title": "The Great Gatsby",
+      "Description": "A classic novel written by F. Scott Fitzgerald..."
+    },
+    "ToKillAMockingbird": {
+      "Title": "To Kill a Mockingbird",
+      "Description": "Harper Lee's Pulitzer Prize-winning novel..."
+    },
+    "1984": {
+      "Title": "1984",
+      "Description": "George Orwell's dystopian novel '1984' delves into the dangers of totalitarianism and extreme political ideology, presenting a chilling view of a future society under constant surveillance and control."
+    },
+    "PrideandPrejudice": {
+      "Title": "Pride and Prejudice",
+      "Description": "Jane Austen's beloved novel, 'Pride and Prejudice', follows the life of Elizabeth Bennet as she navigates issues of class, family, and love in early 19th-century England."
+    },
+    "MobyDick": {
+      "Title": "Moby Dick",
+      "Description": "'Moby Dick' by Herman Melville tells the story of Captain Ahab's obsessive quest to hunt the great white whale, exploring themes of vengeance, fate, and humanity's struggle against nature."
+    }
   }
 }

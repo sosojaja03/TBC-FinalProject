@@ -1,0 +1,27 @@
+{
+  "About": {
+    "Title": "About BooksForAll",
+    "Description": "Discover your next great read, connect with fellow book lovers, and share your thoughts with our community.",
+    "Mission": {
+      "Title": "Our Mission",
+      "Description": "At BooksForAll, we aim to create a sanctuary for book enthusiasts. From timeless classics to contemporary masterpieces, we strive to offer something for everyone while fostering a love for reading."
+    },
+    "Story": {
+      "Title": "Our Story",
+      "Description1": "Founded in 2023, BooksForAll began with a vision to make books more accessible and reading more enjoyable.",
+      "Description2": "Today, BooksForAll is more than just a bookstore; it's a community that celebrates the magic of storytelling and the joy of discovering your next favorite book."
+    },
+    "Community": {
+      "Title": "Join Our Community",
+      "Description": "Whether you're a bookworm, a casual reader, or just exploring, we welcome you to join BooksForAll. Let's embark on a literary journey together."
+    },
+    "Button": "Start Browsing"
+  },
+  "whatWeOffer": "What We Offer",
+  "diverseCollection": "Diverse Collection",
+  "diverseCollectionDesc": "Browse an extensive collection of genres, from fiction and fantasy to self-help and biographies.",
+  "communityReviews": "Community Reviews",
+  "communityReviewsDesc": "Read reviews and ratings from fellow readers, and share your thoughts on the books you've read.",
+  "easyShopping": "Easy Shopping",
+  "easyShoppingDesc": "Add books to your cart with ease and enjoy a seamless checkout experience tailored for book lovers."
+}

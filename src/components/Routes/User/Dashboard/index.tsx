@@ -1,14 +1,18 @@
-import { IsAuthorisedGuard } from "@/components/route-guards/AuthGuard";
-import { Layout } from "lucide-react";
+import { IsAuthorisedGuard } from "@/components/RouteGuards/AuthGuard";
+import { Layout } from "@/components/Layout/Layout";
 import { lazy, Suspense } from "react";
 import { Route } from "react-router-dom";
 import { DASHBOARD_PATHS } from "./dashboard.enum";
 
-const MainPage = lazy(() => import("@/components/main/MainPage"));
-const AboutPage = lazy(() => import("@/components/About/About"));
-const AuthorPage = lazy(() => import("@/components/AuthorPage/SingleAuthor"));
-const BlogView = lazy(() => import("@/components/Blogs/Blog"));
-const ProfileView = lazy(() => import("@/components/Profile/view/profile"));
+const MainPage = lazy(() => import("@/components/Pages/MainPage/MainPage"));
+const AboutPage = lazy(() => import("@/components/Pages/AboutPage/About"));
+const AuthorPage = lazy(
+  () => import("@/components/Pages/AuthorPage/SingleAuthor"),
+);
+const ReviewView = lazy(() => import("@/components/Pages/Reviews/Reviews"));
+const ProfileView = lazy(
+  () => import("@/components/Pages/Profile/view/ProfilePage"),
+);
 
 export const DASHBOARD_ROUTES = [
   <Route
@@ -39,7 +43,7 @@ export const DASHBOARD_ROUTES = [
       path={DASHBOARD_PATHS.REVIEW_LIST}
       element={
         <Suspense fallback={<div>Loading...</div>}>
-          <BlogView />
+          <ReviewView />
         </Suspense>
       }
     />

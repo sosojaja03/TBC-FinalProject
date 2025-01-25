@@ -1,7 +1,9 @@
 {
   "Home": "Home",
   "Write": "Write",
-  "About": "About",
+  "About": "About Us",
   "English": "English",
-  "Georgian": "Georgian"
+  "Georgian": "Georgian",
+  "CreateReview": "Create Review",
+  "LogOut": "LogOut"
 }

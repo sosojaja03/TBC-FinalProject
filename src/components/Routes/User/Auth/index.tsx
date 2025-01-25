@@ -1,12 +1,14 @@
-import { AuthLayout } from "@/components/Layout/authLayout";
-import { IsUnAuthorisedGuard } from "@/components/route-guards/AuthGuard";
+import { AuthLayout } from "@/components/Layout/AuthLayout";
+import { IsUnAuthorisedGuard } from "@/components/RouteGuards/AuthGuard";
 import { lazy, Suspense } from "react";
 import { Route, Navigate } from "react-router-dom";
 import { AUTH_PATHS } from "./auth.enum";
 
-const SignInPage = lazy(() => import("@/components/Registration/ProfileForm"));
+const SignInPage = lazy(
+  () => import("@/components/Authorisation/SignIn/view/SignInPage"),
+);
 const RegistrationPage = lazy(
-  () => import("@/components/Registration/Registration"),
+  () => import("@/components/Authorisation/Registration/view/RegistrationPage"),
 );
 
 export const AUTH_ROUTES = [

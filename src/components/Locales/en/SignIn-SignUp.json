@@ -22,5 +22,13 @@
   },
   "bio": {
     "maxLength": "Bio cannot be longer than 500 characters"
-  }
+  },
+  "SignIn": "Sign In",
+  "Register": "Register",
+  "Submit": "Submit",
+  "EnterYourPassword": "Enter your password",
+  "EnterYourEmail": "Enter your email",
+  "Password": "Password",
+  "Welcome": "Welcome to the registration page! Add your registration details here.",
+  "AlreadyHaveAccount": "If you already have an account, please sign in."
 }
