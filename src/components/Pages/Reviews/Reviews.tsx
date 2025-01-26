@@ -182,7 +182,7 @@ const ReviewView = () => {
   };
 
   return (
-    <div className="flex flex-col gap-y-10">
+    <div className="flex h-full w-full flex-col gap-y-10">
       <div className="flex flex-col items-center">
         <div className="mt-10 text-center">
           <h1 className="font-serif text-4xl font-bold text-amber-900 dark:text-amber-600">
@@ -252,7 +252,7 @@ const ReviewView = () => {
           />
         </div>
       </div>
-      <div className="flex flex-col gap-y-10 px-32">
+      <div className="flex h-full w-full flex-col gap-y-10 px-4 sm:px-16 md:px-32">
         {isLoading && (
           <p className="text-center text-gray-500">Loading Books...</p>
         )}
@@ -269,12 +269,12 @@ const ReviewView = () => {
           return (
             <div
               key={book.id}
-              className="flex flex-col gap-y-4 rounded-lg border border-amber-200 bg-card p-6 shadow-md transition-shadow duration-300 hover:shadow-lg dark:border-none dark:bg-amber-950"
+              className="flex w-full max-w-[100%] flex-col gap-y-2 rounded-lg border border-amber-200 bg-card p-4 shadow-md transition-shadow duration-300 hover:shadow-lg dark:border-none dark:bg-amber-950 sm:max-w-[90%] sm:p-6 md:max-w-[80%] lg:max-w-[100%]"
             >
               {bookImageUrl && (
                 <div className="overflow-hidden rounded-lg">
                   <img
-                    className="max-h-96 w-full object-cover"
+                    className="max-h-72 w-full object-cover"
                     src={bookImageUrl}
                     alt={book?.title || "book image"}
                   />
