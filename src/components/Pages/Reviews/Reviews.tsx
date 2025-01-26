@@ -92,6 +92,34 @@ const ReviewView = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [editingBook, setEditingBook] = useState<SingleReview | null>(null);
   const [user, setUser] = useState<User | null>(null);
+  const [creatorDetails, setCreatorDetails] = useState<{
+    [key: string]: string;
+  }>({});
+
+  // Function to get book creator's details
+  const getBookCreatorDetails = async (userId: string) => {
+    try {
+      // First, try to get user from auth
+      const { data: authData } = await supabase.auth.getUser(userId);
+
+      // If auth user has an email, return it
+      if (authData.user?.email) {
+        return authData.user.email;
+      }
+
+      // Fallback to profiles table if you have one
+      const { data: profileData } = await supabase
+        .from("profiles")
+        .select("username, email")
+        .eq("id", userId)
+        .single();
+
+      return profileData?.email || profileData?.username || userId;
+    } catch (error) {
+      console.error("Error fetching creator details:", error);
+      return userId;
+    }
+  };
 
   // Add this useEffect to get the current user
   useEffect(() => {
@@ -209,6 +237,23 @@ const ReviewView = () => {
     });
   };
 
+  useEffect(() => {
+    const fetchCreatorDetails = async () => {
+      const details: { [key: string]: string } = {};
+
+      for (const book of Books) {
+        if (book.user_id && !creatorDetails[book.user_id]) {
+          const creatorInfo = await getBookCreatorDetails(book.user_id);
+          details[book.user_id] = creatorInfo;
+        }
+      }
+
+      setCreatorDetails((prev) => ({ ...prev, ...details }));
+    };
+
+    fetchCreatorDetails();
+  }, [Books, creatorDetails]);
+
   return (
     <div className="flex h-full w-full flex-col gap-y-10">
       <div className="flex flex-col items-center">
@@ -311,6 +356,14 @@ const ReviewView = () => {
               <h3 className="mb-4 line-clamp-2 font-serif text-xl font-bold text-amber-700">
                 {book?.title}
               </h3>
+              <div className="mb-3 flex items-center gap-2 text-sm text-amber-600">
+                {t("Review-Translation.CreatedBy")}:
+                <span className="ml-1">
+                  {book.user_id
+                    ? creatorDetails[book.user_id] || book.user_id
+                    : "Unknown"}
+                </span>
+              </div>
               <p className="mb-4 line-clamp-3 text-amber-700">
                 {book?.description}
               </p>
