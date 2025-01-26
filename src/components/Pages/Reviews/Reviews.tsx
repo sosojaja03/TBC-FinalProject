@@ -17,6 +17,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { BookOpen, Clock, Search } from "lucide-react";
+import { User } from "@supabase/supabase-js";
 
 dayjs.extend(relativeTime);
 
@@ -90,6 +91,18 @@ const ReviewView = () => {
   const queryClient = useQueryClient();
   const [searchParams, setSearchParams] = useSearchParams();
   const [editingBook, setEditingBook] = useState<SingleReview | null>(null);
+  const [user, setUser] = useState<User | null>(null);
+
+  // Add this useEffect to get the current user
+  useEffect(() => {
+    const fetchUser = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      setUser(user);
+    };
+    fetchUser();
+  }, []);
 
   const initialParams = useMemo(
     () => qs.parse(searchParams.toString()) as { searchText?: string },
@@ -108,8 +121,18 @@ const ReviewView = () => {
   // Mutation for deleting a book
   const deleteBookMutation = useMutation({
     mutationFn: async (bookId: number) => {
-      const { error } = await supabase.from("Books").delete().eq("id", bookId);
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      const { data, error } = await supabase
+        .from("Books")
+        .delete()
+        .eq("id", bookId)
+        .eq("user_id", user?.id || ""); // Ensure only the creator can delete
+
       if (error) throw error;
+      return data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["Books"] });
@@ -119,10 +142,15 @@ const ReviewView = () => {
   // Mutation for updating a book
   const updateBookMutation = useMutation({
     mutationFn: async (updatedBook: Partial<SingleReview>) => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
       const { error } = await supabase
         .from("Books")
         .update(updatedBook)
-        .eq("id", updatedBook.id!);
+        .eq("id", updatedBook.id!)
+        .eq("user_id", user?.id || ""); // Ensure only the creator can update
 
       if (error) throw error;
     },
@@ -290,22 +318,24 @@ const ReviewView = () => {
                 <Clock className="h-4 w-4" />
                 <span>{formatbookDate(book.created_at)}</span>
               </div>
-              <div className="flex flex-col gap-2 sm:flex-row">
-                <Button
-                  variant="outline"
-                  className="w-full border-amber-200 text-amber-800 hover:bg-amber-100 dark:border-none dark:bg-amber-200 dark:text-gray-900 dark:hover:bg-amber-200 dark:hover:text-gray-800 sm:w-auto"
-                  onClick={() => handleEditBook(book)}
-                >
-                  {t("Review-Translation.Edit")}
-                </Button>
-                <Button
-                  variant="destructive"
-                  className="w-full bg-red-500 text-white hover:bg-red-600 dark:bg-red-700 dark:hover:bg-red-800 sm:w-auto"
-                  onClick={() => handleDeleteBook(book.id)}
-                >
-                  {t("Review-Translation.Delete")}
-                </Button>
-              </div>
+              {user?.id === book.user_id && (
+                <div className="flex flex-col gap-2 sm:flex-row">
+                  <Button
+                    variant="outline"
+                    className="w-full border-amber-200 text-amber-800 hover:bg-amber-100 dark:border-none dark:bg-amber-200 dark:text-gray-900 dark:hover:bg-amber-200 dark:hover:text-gray-800 sm:w-auto"
+                    onClick={() => handleEditBook(book)}
+                  >
+                    {t("Review-Translation.Edit")}
+                  </Button>
+                  <Button
+                    variant="destructive"
+                    className="w-full bg-red-500 text-white hover:bg-red-600 dark:bg-red-700 dark:hover:bg-red-800 sm:w-auto"
+                    onClick={() => handleDeleteBook(book.id)}
+                  >
+                    {t("Review-Translation.Delete")}
+                  </Button>
+                </div>
+              )}
             </div>
           );
         })}

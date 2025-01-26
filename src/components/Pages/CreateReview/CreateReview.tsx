@@ -2,7 +2,7 @@ import { Button } from "../../ui/button";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/supabase";
 import { Controller, useForm } from "react-hook-form";
-import { UseAuthContext } from "../../Contexts/hooks/AuthContextHook";
+// import { UseAuthContext } from "../../Contexts/hooks/AuthContextHook";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { t } from "i18next";
 
@@ -23,7 +23,7 @@ const BooksListFilterFormDefaultValues = {
 };
 
 const CreateReviewForm = () => {
-  const { user } = UseAuthContext();
+  // const { user } = UseAuthContext();
   const queryClient = useQueryClient();
 
   const { control, handleSubmit, reset } = useForm<BooksListCreateValues>({
@@ -32,8 +32,6 @@ const CreateReviewForm = () => {
 
   const { mutate: addReview } = useMutation({
     mutationFn: async (formValues: BooksListCreateValues) => {
-      console.log(formValues);
-
       if (formValues?.image_file) {
         try {
           const { error, data } = await supabase.storage
@@ -47,7 +45,9 @@ const CreateReviewForm = () => {
             return;
           }
 
-          console.log("Upload successful:", data);
+          const {
+            data: { user },
+          } = await supabase.auth.getUser();
 
           const { error: insertError, data: insertData } = await supabase
             .from("Books")
@@ -74,7 +74,6 @@ const CreateReviewForm = () => {
       }
     },
     onSuccess: () => {
-      console.log("Review created successfully");
       queryClient.invalidateQueries({ queryKey: ["Books"] });
     },
   });

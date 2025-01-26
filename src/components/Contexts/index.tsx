@@ -7,7 +7,7 @@ import React, {
 import { Session } from "@supabase/supabase-js";
 
 // Define the user type based on your Supabase user data
-interface User {
+export interface User {
   id: string;
   email: string;
   name: string;
